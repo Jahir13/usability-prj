@@ -1,5 +1,5 @@
-import { useEffect, type CSSProperties } from "react";
-import { figmaTokens } from "../../styles/tokens";
+import { useEffect } from "react";
+import { Button } from "../../components/ui/Button";
 
 type OnboardingModalProps = {
   currentStep: number;
@@ -11,77 +11,6 @@ type OnboardingModalProps = {
 
 const imgIcon =
   "https://www.figma.com/api/mcp/asset/da4c6158-d55e-4ec9-8c04-172a242e5541";
-
-const overlayStyle: CSSProperties = {
-  position: "relative",
-  minHeight: figmaTokens.layout.onboardingModal.backdropMinHeight,
-  width: "100%",
-  background: figmaTokens.colors.background.app,
-  overflow: "hidden",
-  boxSizing: "border-box",
-};
-
-const stageStyle: CSSProperties = {
-  minHeight: figmaTokens.layout.onboardingModal.backdropMinHeight,
-  width: "100%",
-  background: figmaTokens.colors.background.elevated,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  boxSizing: "border-box",
-};
-
-const cardStyle: CSSProperties = {
-  width: figmaTokens.layout.onboardingModal.cardWidth,
-  height: figmaTokens.layout.onboardingModal.cardHeight,
-  borderRadius: figmaTokens.layout.onboardingModal.cardRadius,
-  background: figmaTokens.colors.surface.white,
-  boxShadow: figmaTokens.layout.onboardingModal.cardShadow,
-  boxSizing: "border-box",
-  position: "relative",
-  overflow: "hidden",
-};
-
-const contentStyle: CSSProperties = {
-  width: "100%",
-  height: "100%",
-  boxSizing: "border-box",
-  padding: `${figmaTokens.layout.onboardingModal.contentPaddingY}px ${figmaTokens.layout.onboardingModal.contentPaddingX}px`,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-};
-
-const headingStyle: CSSProperties = {
-  ...figmaTokens.typography.styles.onboardingTitle,
-  color: figmaTokens.colors.text.primary,
-  textAlign: "center",
-  maxWidth: figmaTokens.layout.onboardingModal.headingMaxWidth,
-  margin: 0,
-};
-
-const paragraphStyle: CSSProperties = {
-  ...figmaTokens.typography.styles.body,
-  color: figmaTokens.colors.text.secondary,
-  textAlign: "center",
-  maxWidth: figmaTokens.layout.onboardingModal.paragraphMaxWidth,
-  margin: 0,
-};
-
-const dotsRowStyle: CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: figmaTokens.layout.onboardingModal.dotsContainerGap,
-  width: figmaTokens.layout.onboardingModal.dotsContainerWidth,
-  paddingBottom: figmaTokens.layout.onboardingModal.dotsBottomPadding,
-  boxSizing: "border-box",
-};
-
-const actionTextStyle: CSSProperties = {
-  ...figmaTokens.typography.styles.bodySmall,
-  fontWeight: figmaTokens.typography.weights.medium,
-  lineHeight: "22.5px",
-};
 
 function clampStep(currentStep: number, totalSteps: number) {
   if (totalSteps <= 0) {
@@ -104,7 +33,7 @@ function StepDots({
 
   return (
     <div
-      style={dotsRowStyle}
+      className="flex items-center gap-2 w-14 pb-10 box-border shrink-0"
       aria-label={`Step ${Math.min(Math.max(currentStep, 1), totalSteps)} of ${totalSteps}`}
     >
       {Array.from({ length: totalSteps }, (_, index) => {
@@ -114,17 +43,9 @@ function StepDots({
           <div
             key={index}
             aria-hidden="true"
-            style={{
-              width: active
-                ? figmaTokens.layout.onboardingModal.dotActiveWidth
-                : figmaTokens.layout.onboardingModal.dotSize,
-              height: figmaTokens.layout.onboardingModal.dotSize,
-              borderRadius: figmaTokens.radii.full,
-              background: active
-                ? figmaTokens.colors.primary[500]
-                : figmaTokens.colors.border.default,
-              flexShrink: 0,
-            }}
+            className={`h-2 rounded-full shrink-0 transition-all ${
+              active ? "w-6 bg-primary-500" : "w-2 bg-border-default"
+            }`}
             data-node-id={nodeIds[index] ?? nodeIds[nodeIds.length - 1]}
             data-name="Button"
           />
@@ -134,72 +55,26 @@ function StepDots({
   );
 }
 
-function ActionButton({
-  children,
-  onClick,
-  variant,
-}: {
-  children: string;
-  onClick: () => void;
-  variant: "back" | "next";
-}) {
-  const isBack = variant === "back";
 
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        height: figmaTokens.layout.onboardingModal.actionHeight,
-        borderRadius: figmaTokens.layout.onboardingModal.actionRadius,
-        border: isBack
-          ? `${figmaTokens.borderWidths.hairline}px solid ${figmaTokens.colors.primary[500]}`
-          : 0,
-        background: isBack
-          ? figmaTokens.colors.surface.white
-          : figmaTokens.colors.primary[500],
-        boxShadow: isBack ? "none" : figmaTokens.shadows.primaryCta,
-        color: isBack
-          ? figmaTokens.colors.primary[500]
-          : figmaTokens.colors.text.onPrimary,
-        flex: isBack
-          ? `${figmaTokens.layout.onboardingModal.backFlex} 0 0`
-          : `${figmaTokens.layout.onboardingModal.nextFlex} 0 0`,
-        minWidth: 1,
-        boxSizing: "border-box",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      data-node-id={isBack ? "8:286" : "8:288"}
-      data-name="Button"
-    >
-      <span style={actionTextStyle} data-node-id={isBack ? "8:287" : "8:289"}>
-        {children}
-      </span>
-    </button>
-  );
-}
 
 const stepsData = [
   {
     title: "Learn at your own pace",
     description: "LingoGuru adapts to your level and learning pace. Each lesson lasts just 5 minutes, making it perfect for your daily routine.",
     emoji: "📚",
-    badgeColor: figmaTokens.colors.surface.softOrange,
+    badgeColor: "#fff3e2", // surface.softOrange
   },
   {
     title: "Practice all four skills",
     description: "Develop your grammar, speaking, listening, and writing through interactive exercises and real-world conversations.",
     emoji: "🎤",
-    badgeColor: figmaTokens.colors.surface.softBlue,
+    badgeColor: "#eef1fd", // surface.softBlue
   },
   {
     title: "Track your progress",
     description: "Earn XP, unlock achievements, maintain your daily streak, and level up your English proficiency every day!",
     emoji: "⚡",
-    badgeColor: figmaTokens.colors.surface.softGreen,
+    badgeColor: "#e6f9ee", // surface.softGreen
   }
 ];
 
@@ -229,69 +104,40 @@ export function OnboardingModal({
   }, [onNext, onBack]);
 
   return (
-    <div style={overlayStyle} data-node-id="8:250" data-name="Tutorial">
-      <div style={stageStyle} data-node-id="8:251" data-name="Body">
+    <div className="relative min-h-screen w-full bg-background-app overflow-hidden box-border" data-node-id="8:250" data-name="Tutorial">
+      <div className="min-h-screen w-full bg-background-app flex items-center justify-center box-border" data-node-id="8:251" data-name="Body">
         <div 
-          style={cardStyle} 
+          className="w-[720px] h-[472px] rounded-[24px] bg-surface-white shadow-[0px_4px_16px_rgba(26,29,46,0.08)] box-border relative overflow-hidden" 
           data-node-id="8:252" 
           data-name="Container"
           role="dialog"
           aria-label="Tutorial onboarding"
           aria-modal="true"
         >
-          <div style={contentStyle} role="document">
+          <div className="w-full h-full box-border py-[56px] px-16 flex flex-col items-center" role="document">
             <div
-              style={{
-                width: figmaTokens.layout.onboardingModal.iconFrameWidth,
-                height: figmaTokens.layout.onboardingModal.iconFrameHeight,
-                position: "relative",
-                flexShrink: 0,
-              }}
+              className="w-24 h-[120px] relative shrink-0"
               data-node-id="8:253"
               data-name="Container (margin)"
             >
               <div
-                style={{
-                  width: figmaTokens.layout.onboardingModal.iconSquareSize,
-                  height: figmaTokens.layout.onboardingModal.iconSquareSize,
-                  position: "relative",
-                }}
+                className="w-24 h-24 relative"
                 data-node-id="8:254"
                 data-name="Icon"
               >
                 <img
                   alt=""
                   src={imgIcon}
-                  style={{ display: "block", width: "100%", height: "100%" }}
+                  className="block w-full h-full"
                 />
                 <div
-                  style={{
-                    position: "absolute",
-                    left: figmaTokens.layout.onboardingModal
-                      .iconBadgeOffsetLeft,
-                    top: figmaTokens.layout.onboardingModal.iconBadgeOffsetTop,
-                    width: figmaTokens.layout.onboardingModal.iconBadgeSize,
-                    height: figmaTokens.layout.onboardingModal.iconBadgeSize,
-                    borderRadius: figmaTokens.radii.full,
-                    background: currentStepData.badgeColor,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "background 0.3s ease",
-                  }}
+                  style={{ background: currentStepData.badgeColor }}
+                  className="absolute left-16 top-16 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300"
                   data-node-id="8:273"
                   data-name="Container"
                 >
                   <span
-                    style={{
-                      fontFamily: figmaTokens.typography.families.body,
-                      fontWeight: figmaTokens.typography.weights.regular,
-                      fontSize:
-                        figmaTokens.layout.onboardingModal.iconEmojiFontSize,
-                      lineHeight: `${figmaTokens.layout.onboardingModal.iconEmojiLineHeight}px`,
-                      color: figmaTokens.colors.text.primary,
-                      textAlign: "center",
-                    }}
+                    className="font-body font-normal text-[20px] leading-[30px] text-text-primary text-center"
                     data-node-id="8:274"
                   >
                     {currentStepData.emoji}
@@ -301,50 +147,37 @@ export function OnboardingModal({
             </div>
 
             <div
-              style={{
-                marginBottom:
-                  figmaTokens.layout.onboardingModal.headingMarginBottom,
-                flexShrink: 0,
-              }}
+              className="mb-4 shrink-0"
               data-node-id="8:275"
             >
               <div
-                style={{
-                  maxWidth: figmaTokens.layout.onboardingModal.headingMaxWidth,
-                }}
+                className="max-w-[253px]"
                 data-node-id="8:276"
                 data-name="Heading 2"
               >
-                <h1 style={headingStyle} data-node-id="8:277">
+                <h1 className="text-onboardingTitle text-text-primary text-center m-0" data-node-id="8:277">
                   {currentStepData.title}
                 </h1>
               </div>
             </div>
 
             <div
-              style={{
-                marginBottom:
-                  figmaTokens.layout.onboardingModal.paragraphMarginBottom,
-                flexShrink: 0,
-              }}
+              className="mb-10 shrink-0"
               data-node-id="8:278"
             >
               <div
-                style={{
-                  maxWidth:
-                    figmaTokens.layout.onboardingModal.paragraphMaxWidth,
-                }}
+                className="max-w-[480px]"
                 data-node-id="8:279"
                 data-name="Paragraph"
               >
-                <p style={paragraphStyle} data-node-id="8:280">
+                <p className="text-body text-text-secondary text-center m-0" data-node-id="8:280">
                   {currentStepData.description}
                 </p>
               </div>
             </div>
 
             <div
-              style={{ flexShrink: 0 }}
+              className="shrink-0"
               data-node-id="8:281"
               data-name="Container (margin)"
             >
@@ -352,62 +185,44 @@ export function OnboardingModal({
             </div>
 
             <div
-              style={{
-                width: figmaTokens.layout.onboardingModal.actionsMaxWidth,
-                flexShrink: 0,
-              }}
+              className="w-full max-w-[400px] shrink-0"
               data-node-id="8:285"
               data-name="Container"
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: figmaTokens.layout.onboardingModal.actionsGap,
-                  width: "100%",
-                }}
+            <div
+              className="flex items-center gap-4 w-full"
+            >
+              <Button
+                variant="outline-primary"
+                size="md"
+                onClick={onBack}
+                className="flex-[129.328_0_0] font-medium text-[15px] leading-[22.5px]"
               >
-                <ActionButton variant="back" onClick={onBack}>
-                  Back
-                </ActionButton>
-                <ActionButton variant="next" onClick={onNext}>
-                  {safeStep === totalSteps ? "Finish" : "Next"}
-                </ActionButton>
-              </div>
+                Back
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                onClick={onNext}
+                className="flex-[254.672_0_0] font-medium text-[15px] leading-[22.5px]"
+              >
+                {safeStep === totalSteps ? "Finish" : "Next"}
+              </Button>
             </div>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onSkip}
-          style={{
-            position: "absolute",
-            top: figmaTokens.layout.onboardingModal.skipTop,
-            right: figmaTokens.layout.screenPaddingX,
-            width: figmaTokens.layout.onboardingModal.skipWidth,
-            height: figmaTokens.layout.onboardingModal.skipHeight,
-            border: 0,
-            padding: 0,
-            background: "transparent",
-            color: figmaTokens.colors.text.tertiary,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          aria-label={`Skip tutorial at step ${safeStep} of ${totalSteps}`}
-          data-node-id="8:290"
-          data-name="Button"
-        >
-          <span
-            style={figmaTokens.typography.styles.label}
-            data-node-id="8:291"
-          >
-            Skip →
-          </span>
-        </button>
       </div>
+
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onSkip}
+        className="absolute top-5 right-8 w-[56px] h-[21px] p-0 text-text-tertiary text-label"
+        aria-label={`Skip tutorial at step ${safeStep} of ${totalSteps}`}
+      >
+        Skip →
+      </Button>
     </div>
+  </div>
   );
 }

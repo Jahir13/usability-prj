@@ -1,6 +1,3 @@
-import type { CSSProperties } from "react";
-import { figmaTokens } from "../../styles/tokens";
-
 export type ActiveSkill = "grammar" | "speaking" | "listening" | "writing";
 
 type SkillTabSidebarProps = {
@@ -21,24 +18,6 @@ const skillTabs: SkillTabItem[] = [
   { skill: "writing", icon: "✍️", label: "Writing" },
 ];
 
-const sidebarStyle: CSSProperties = {
-  width: figmaTokens.layout.learningPath.sidebarWidth,
-  minHeight: figmaTokens.layout.learningPath.sidebarBodyHeight,
-  background: figmaTokens.colors.surface.white,
-  borderRight: `${figmaTokens.borderWidths.hairline}px solid ${figmaTokens.colors.border.default}`,
-  boxSizing: "border-box",
-  display: "flex",
-  flexDirection: "column",
-  flexShrink: 0,
-};
-
-const listStyle: CSSProperties = {
-  position: "relative",
-  width: "100%",
-  boxSizing: "border-box",
-  paddingTop: figmaTokens.layout.sidebarPaddingY,
-};
-
 function SkillTabButton({
   icon,
   label,
@@ -50,66 +29,22 @@ function SkillTabButton({
   active: boolean;
   onClick?: () => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <button
       type="button"
       aria-current={active ? "page" : undefined}
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        width: "100%",
-        height: figmaTokens.layout.learningPath.skillTabRowHeight,
-        border: 0,
-        padding: 0,
-        textAlign: "left",
-        background: active
-          ? figmaTokens.layout.learningPath.skillTabActiveBackground
-          : isHovered
-            ? figmaTokens.colors.background.app
-            : "transparent",
-        borderLeft: `${figmaTokens.borderWidths.active}px solid ${active ? figmaTokens.layout.learningPath.skillTabActiveBorder : figmaTokens.colors.decoration.black0}`,
-        display: "flex",
-        alignItems: "center",
-        boxSizing: "border-box",
-        cursor: "pointer",
-        transition: "all 0.2s ease",
-      }}
+      className={`flex-1 h-[51px] border-0 p-0 flex items-center justify-center box-border cursor-pointer transition-all duration-200 min-w-[100px] md:w-full md:flex-none md:justify-start md:min-w-0 md:border-b-0 ${
+        active 
+          ? "bg-primary-soft border-b-4 border-primary-500 md:border-b-0 md:border-l-4 md:border-primary-500" 
+          : "bg-transparent border-b-4 border-transparent hover:bg-background-app md:border-b-0 md:border-l-4 md:border-transparent"
+      }`}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: figmaTokens.layout.learningPath.skillTabRowGap,
-          paddingLeft: figmaTokens.layout.learningPath.skillTabRowInsetLeft,
-          width: figmaTokens.layout.learningPath.skillTabTextWidth,
-          boxSizing: "border-box",
-        }}
-      >
-        <span
-          style={{
-            ...figmaTokens.typography.styles.learningPathSkillEmoji,
-            display: "inline-flex",
-            width: figmaTokens.layout.learningPath.skillTabIconWidth,
-            height: figmaTokens.layout.learningPath.skillTabIconHeight,
-            alignItems: "center",
-            justifyContent: "center",
-            color: figmaTokens.colors.text.primary,
-          }}
-        >
+      <div className="flex items-center gap-3 px-4 box-border w-full justify-center md:justify-start md:pl-6 md:w-[227px]">
+        <span className="inline-flex w-[24.7px] h-[27px] items-center justify-center text-text-primary text-learningPathSkillEmoji">
           {icon}
         </span>
-        <span
-          style={{
-            ...figmaTokens.typography.styles.label,
-            color: active
-              ? figmaTokens.colors.primary[500]
-              : figmaTokens.colors.text.primary,
-            whiteSpace: "nowrap",
-          }}
-        >
+        <span className={`text-label whitespace-nowrap ${active ? "text-primary-500" : "text-text-primary"}`}>
           {label}
         </span>
       </div>
@@ -117,12 +52,10 @@ function SkillTabButton({
   );
 }
 
-import { useState } from "react";
-
 export function SkillTabSidebar({ activeSkill, onSkillChange }: SkillTabSidebarProps) {
   return (
-    <aside style={sidebarStyle} data-node-id="12:1592" data-name="Sidebar">
-      <div style={listStyle}>
+    <aside className="w-full bg-surface-white border-b border-border-default flex flex-col shrink-0 box-border md:w-[280px] md:min-h-[calc(100vh-64px)] md:border-r md:border-b-0" data-node-id="12:1592" data-name="Sidebar">
+      <div className="flex flex-row overflow-x-auto w-full md:flex-col md:overflow-x-visible md:pt-6">
         {skillTabs.map((item) => (
           <SkillTabButton
             key={item.skill}

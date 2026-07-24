@@ -1,5 +1,4 @@
 import { CheckCircle2, XCircle } from "lucide-react";
-import { figmaTokens } from "../../styles/tokens";
 
 type FeedbackModalProps = {
   isCorrect: boolean;
@@ -14,61 +13,36 @@ export function FeedbackModal({
 }: FeedbackModalProps) {
   return (
     <div 
-      style={{
-        background: isCorrect ? figmaTokens.colors.surface.softGreen : figmaTokens.colors.danger.soft,
-        borderLeft: `5px solid ${isCorrect ? figmaTokens.colors.success[500] : figmaTokens.colors.danger[500]}`,
-        padding: "16px 20px",
-        borderRadius: figmaTokens.radii.sm,
-        boxSizing: "border-box",
-        display: "flex",
-        alignItems: "flex-start",
-        gap: 16,
-        animation: "feedbackSlideIn 0.3s ease-out",
-      }}
+      className={`border-l-[5px] p-4 px-5 rounded-sm box-border flex items-start gap-4 animate-feedbackSlideIn ${
+        isCorrect 
+          ? "bg-surface-softGreen border-success-500" 
+          : "bg-danger-soft border-danger-500"
+      }`}
       role="alert"
       aria-live="polite"
     >
       {isCorrect ? (
-        <CheckCircle2 size={24} color={figmaTokens.colors.success[500]} style={{ flexShrink: 0 }} />
+        <CheckCircle2 size={24} className="text-success-500 shrink-0" />
       ) : (
-        <XCircle size={24} color={figmaTokens.colors.danger[500]} style={{ flexShrink: 0 }} />
+        <XCircle size={24} className="text-danger-500 shrink-0" />
       )}
-      <div style={{ flex: 1 }}>
-        <h4 style={{ 
-          margin: "0 0 4px 0", 
-          ...figmaTokens.typography.styles.label,
-          color: isCorrect ? figmaTokens.colors.success[500] : figmaTokens.colors.danger[500]
-        }}>
+      <div className="flex-1 text-left">
+        <h4 className={`m-0 mb-1 text-label ${
+          isCorrect ? "text-success-500" : "text-danger-500"
+        }`}>
           {isCorrect ? "Correct answer!" : "Incorrect answer"}
         </h4>
         {!isCorrect && (
-          <p style={{ 
-            margin: "0 0 8px 0", 
-            ...figmaTokens.typography.styles.bodySmall, 
-            color: figmaTokens.colors.text.primary,
-            fontWeight: "bold"
-          }}>
-            Correct answer: <span style={{ textDecoration: "underline" }}>{correctAnswer}</span>
+          <p className="m-0 mb-2 text-bodySmall text-text-primary font-bold">
+            Correct answer: <span className="underline">{correctAnswer}</span>
           </p>
         )}
         {translation && (
-          <p style={{ 
-            margin: 0, 
-            ...figmaTokens.typography.styles.bodySmall, 
-            color: figmaTokens.colors.text.tertiary,
-            fontStyle: "italic"
-          }}>
+          <p className="m-0 text-bodySmall text-text-tertiary italic">
             Translation: {translation}
           </p>
         )}
       </div>
-      
-      <style>{`
-        @keyframes feedbackSlideIn {
-          from { transform: translateY(10px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }

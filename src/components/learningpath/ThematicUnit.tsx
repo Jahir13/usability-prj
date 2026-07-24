@@ -1,5 +1,3 @@
-import type { CSSProperties } from "react";
-import { figmaTokens } from "../../styles/tokens";
 import { LevelNode, type LevelStatus } from "./LevelNode";
 
 type ThematicUnitProps = {
@@ -12,43 +10,16 @@ type ThematicUnitProps = {
   onLevelClick?: (levelId: string) => void;
 };
 
-const wrapperStyle: CSSProperties = {
-  position: "relative",
-  width: "100%",
-  boxSizing: "border-box",
-};
-
 export function ThematicUnit({ title, levels, onLevelClick }: ThematicUnitProps) {
   return (
-    <section style={wrapperStyle}>
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          height: figmaTokens.layout.learningPath.unitTagHeight,
-          borderRadius: figmaTokens.layout.learningPath.unitTagRadius,
-          paddingLeft: figmaTokens.layout.learningPath.unitTagPaddingX,
-          paddingRight: figmaTokens.layout.learningPath.unitTagPaddingX,
-          background: figmaTokens.colors.surface.softAmber,
-          color: figmaTokens.colors.warning[500],
-          boxSizing: "border-box",
-        }}
-      >
-        <span style={figmaTokens.typography.styles.learningPathUnitTag}>
+    <section className="relative w-full box-border">
+      <div className="inline-flex items-center h-[26px] rounded-full px-3 bg-surface-softAmber text-warning-500 box-border text-left">
+        <span className="text-learningPathUnitTag">
           Thematic Unit: {title}
         </span>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: figmaTokens.layout.learningPath.unitListGap,
-          marginTop:
-            figmaTokens.layout.learningPath.learningPathSectionMarginBottom,
-          boxSizing: "border-box",
-        }}
-      >
+      <div className="flex flex-col gap-3 mt-4 box-border">
         {levels.map((level) => (
           <LevelNode
             key={level.id}

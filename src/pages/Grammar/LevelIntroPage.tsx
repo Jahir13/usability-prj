@@ -1,7 +1,6 @@
-import type { CSSProperties } from "react";
 import { AppHeader } from "../../components/layout/AppHeader";
-import { figmaTokens } from "../../styles/tokens";
 import { ObjectivesChecklist } from "../../components/grammar/ObjectivesChecklist";
+import { RuleCard } from "../../components/grammar/RuleCard";
 import { ExamplesCard } from "../../components/grammar/ExamplesCard";
 import { StartLevelButton } from "../../components/grammar/StartLevelButton";
 import { LESSONS_DATABASE } from "../../config/lessonsData";
@@ -13,15 +12,6 @@ type LevelIntroPageProps = {
   skill: ActiveSkill;
   onStartLevel?: () => void;
   onNavigate: (route: string) => void;
-};
-
-const pageStyle: CSSProperties = {
-  position: "relative",
-  width: "100%",
-  minHeight: figmaTokens.layout.levelIntro.pageHeight,
-  background: figmaTokens.colors.background.app,
-  overflow: "hidden",
-  boxSizing: "border-box",
 };
 
 export function LevelIntroPage({
@@ -40,27 +30,18 @@ export function LevelIntroPage({
   const minutesLabel = currentLevel?.minutesLabel || "~4 mins";
 
   if (!activeTopic) {
-    return <div style={{ padding: 40, textAlign: "center" }}>Level data not found.</div>;
+    return <div className="p-10 text-center">Level data not found.</div>;
   }
 
   const formulaNode = (
-    <p
-      style={{
-        ...figmaTokens.typography.styles.body,
-        fontSize: figmaTokens.layout.grammarLesson.ruleFormulaSize,
-        lineHeight: `${figmaTokens.layout.grammarLesson.ruleFormulaLineHeight}px`,
-        color: figmaTokens.colors.text.tertiary,
-        margin: 0,
-        whiteSpace: "nowrap",
-      }}
-    >
+    <p className="text-body text-[16px] text-text-tertiary m-0 whitespace-nowrap text-left">
       {activeTopic.formula}
     </p>
   );
 
   return (
     <div
-      style={pageStyle}
+      className="relative w-full min-h-screen bg-background-app box-border"
       data-node-id="8:466"
       data-name="Intro de Nivel / Nueva Gramática"
     >
@@ -69,33 +50,9 @@ export function LevelIntroPage({
         onProfileClick={() => onNavigate("#/profile")}
       />
       
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `${figmaTokens.layout.levelIntro.leftColumnWidth}px ${figmaTokens.layout.levelIntro.rightColumnWidth}px`,
-          width: "100%",
-          minHeight: figmaTokens.layout.levelIntro.bodyHeight,
-          paddingTop: figmaTokens.layout.levelIntro.headerHeight,
-          boxSizing: "border-box",
-        }}
-      >
-        <section
-          style={{
-            minHeight: figmaTokens.layout.levelIntro.bodyHeight,
-            background: `linear-gradient(156.23008248917932deg, ${figmaTokens.layout.levelIntro.leftGradientStart} 8.4861%, ${figmaTokens.layout.levelIntro.leftGradientEnd} 91.514%)`,
-            boxSizing: "border-box",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              padding: `${figmaTokens.layout.levelIntro.leftPaddingY}px ${figmaTokens.layout.levelIntro.leftPaddingX}px`,
-            }}
-          >
+      <div className="grid grid-cols-1 w-full box-border pt-16 md:grid-cols-[507px_475px] md:justify-center md:min-h-[calc(100vh-64px)]">
+        <section className="box-border flex items-center justify-center w-full p-[32px_20px] md:min-h-[calc(100vh-64px)] md:p-[48px_64px] bg-[linear-gradient(156.23deg,_#4f6ef7_8.4861%,_#3451d1_91.514%)]">
+          <div className="w-full max-w-[600px] box-border">
             <ObjectivesChecklist
               levelText={activeTopic.levelText}
               title={activeTopic.title}
@@ -105,63 +62,19 @@ export function LevelIntroPage({
           </div>
         </section>
 
-        <section
-          style={{
-            minHeight: figmaTokens.layout.levelIntro.bodyHeight,
-            background: figmaTokens.colors.surface.white,
-            boxSizing: "border-box",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              padding: `${figmaTokens.layout.levelIntro.rightPaddingY}px ${figmaTokens.layout.levelIntro.rightPaddingX}px`,
-              display: "flex",
-              flexDirection: "column",
-              gap: figmaTokens.layout.levelIntro.contentGapTop,
-            }}
-          >
-            {/* Dynamic Rule display block */}
-            <section 
-              style={{
-                width: "100%",
-                minHeight: 120,
-                background: figmaTokens.colors.background.elevated,
-                borderLeft: `6px solid ${figmaTokens.colors.primary[500]}`,
-                borderRadius: figmaTokens.layout.grammarLesson.cardRadius,
-                padding: "20px 24px",
-                boxSizing: "border-box",
-              }}
-            >
-              <div style={{ paddingBottom: 12 }}>
-                <span style={figmaTokens.typography.styles.eyebrow}>MAIN RULE</span>
-              </div>
-              <div>{formulaNode}</div>
-              <div style={{ paddingTop: 10 }}>
-                <div style={{
-                  background: figmaTokens.colors.surface.white,
-                  borderRadius: figmaTokens.radii.sm,
-                  padding: "4px 12px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                }}>
-                  <span style={{ ...figmaTokens.typography.styles.mono, color: figmaTokens.colors.text.primary, fontSize: 13 }}>
-                    {activeTopic.formulaLabel}
-                  </span>
-                </div>
-              </div>
-            </section>
+        <section className="box-border flex items-center justify-center w-full p-[32px_20px] md:min-h-[calc(100vh-64px)] md:p-[48px_48px] bg-surface-white">
+          <div className="w-full max-w-[600px] box-border gap-6 flex flex-col">
+            <RuleCard
+              formula={formulaNode}
+              formulaLabel={activeTopic.formulaLabel}
+            />
 
             <ExamplesCard
               title="examples"
               examples={activeTopic.examples}
             />
             
-            <div style={{ paddingTop: 8, boxSizing: "border-box" }}>
+            <div className="pt-2 box-border">
               <StartLevelButton
                 onStart={onStartLevel}
                 exercises={exercisesCount}

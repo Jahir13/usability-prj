@@ -1,6 +1,6 @@
-import { useState, type ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
 import { Play, Volume2 } from "lucide-react";
-import { figmaTokens } from "../../styles/tokens";
+import { Input } from "../ui/Input";
 
 type ListeningExerciseProps = {
   value: string;
@@ -17,61 +17,40 @@ export function ListeningExercise({
   onChange,
   onPlayAudio,
 }: ListeningExerciseProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20, alignItems: "center" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+    <div className="flex flex-col gap-5 items-center">
+      <div className="flex flex-col gap-3 items-center">
         <button
           type="button"
           onClick={onPlayAudio}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
           aria-label={isPlayingAudio ? "Playing spoken sentence" : "Listen to audio pronunciation"}
-          style={{
-            width: 60,
-            height: 60,
-            borderRadius: figmaTokens.radii.full,
-            background: isPlayingAudio ? figmaTokens.colors.warning.soft : figmaTokens.colors.surface.softOrange,
-            border: `1.5px solid ${figmaTokens.colors.warning[500]}`,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: figmaTokens.colors.warning[500],
-            boxShadow: isHovered 
-              ? "0 4px 12px rgba(247, 161, 79, 0.25)" 
-              : "0 2px 8px rgba(247, 161, 79, 0.15)",
-            transform: isHovered ? "scale(1.05)" : "scale(1)",
-            transition: "all 0.2s ease",
-          }}
+          className={`w-[60px] h-[60px] rounded-full border-[1.5px] border-warning-500 cursor-pointer flex items-center justify-center text-warning-500 shadow-warningGlowMuted hover:shadow-warningGlow transition-all hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-warning-500 ${
+            isPlayingAudio ? "bg-warning-soft" : "bg-surface-softOrange"
+          }`}
         >
           {isPlayingAudio ? (
-            <Volume2 size={24} style={{ animation: "listeningBounce 1s infinite" }} />
+            <Volume2 size={24} className="animate-listeningBounce" />
           ) : (
-            <Play size={24} style={{ marginLeft: 3 }} />
+            <Play size={24} className="ml-1" />
           )}
         </button>
-        <span style={{ ...figmaTokens.typography.styles.labelSmall, color: figmaTokens.colors.text.secondary }}>
+        <span className="text-labelSmall text-text-secondary">
           {isPlayingAudio ? "Playing audio..." : "Tap to listen"}
         </span>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
+      <div className="flex flex-col gap-2 w-full text-left">
         <label 
           htmlFor="listening-input" 
-          style={{ 
-            ...figmaTokens.typography.styles.labelSmall, 
-            color: figmaTokens.colors.text.secondary 
-          }}
+          className="text-labelSmall text-text-secondary"
         >
           Transcribe what you hear:
         </label>
-        <input
+        <Input
           id="listening-input"
           type="text"
           disabled={isSubmitted}
@@ -79,26 +58,8 @@ export function ListeningExercise({
           onChange={handleInputChange}
           placeholder="Type the English sentence you heard..."
           autoComplete="off"
-          style={{
-            width: "100%",
-            padding: "16px 20px",
-            borderRadius: figmaTokens.radii.sm,
-            border: `2px solid ${figmaTokens.colors.border.default}`,
-            fontSize: 16,
-            fontFamily: figmaTokens.typography.families.body,
-            color: figmaTokens.colors.text.primary,
-            boxSizing: "border-box",
-            outline: "none",
-          }}
         />
       </div>
-
-      <style>{`
-        @keyframes listeningBounce {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.1); }
-        }
-      `}</style>
     </div>
   );
 }

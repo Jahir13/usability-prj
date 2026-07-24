@@ -1,6 +1,3 @@
-import type { CSSProperties } from "react";
-import { figmaTokens } from "../../styles/tokens";
-
 type LessonSidebarProps = {
   activeTopicId?: string;
   onTopicChange?: (topicId: string) => void;
@@ -28,14 +25,7 @@ const defaultLessonItems: LessonItem[] = [
   { id: "contractions", label: "Contractions", state: "blocked", marker: "6" },
 ];
 
-const sidebarStyle: CSSProperties = {
-  width: figmaTokens.layout.grammarLesson.sidebarWidth,
-  minHeight: figmaTokens.layout.grammarLesson.sidebarBodyHeight,
-  background: figmaTokens.colors.surface.white,
-  borderRight: `${figmaTokens.borderWidths.hairline}px solid ${figmaTokens.colors.border.default}`,
-  boxSizing: "border-box",
-  flexShrink: 0,
-};
+import { StatusMarker } from "../ui/StatusMarker";
 
 function LessonRow({ 
   item, 
@@ -46,7 +36,6 @@ function LessonRow({
   active: boolean;
   onClick?: () => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
   const isDone = item.state === "done";
   const isBlocked = item.state === "blocked";
 
@@ -63,73 +52,23 @@ function LessonRow({
       type="button"
       aria-current={active ? "page" : undefined}
       onClick={handleClick}
-      onMouseEnter={() => !isBlocked && setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        position: "relative",
-        width: "100%",
-        height: figmaTokens.layout.grammarLesson.sidebarItemHeight,
-        border: 0,
-        padding: 0,
-        background: active
-          ? figmaTokens.layout.grammarLesson.sidebarItemActiveBackground
-          : isHovered
-            ? figmaTokens.colors.background.app
-            : "transparent",
-        borderLeft: `${figmaTokens.layout.grammarLesson.sidebarItemActiveBorderWidth}px solid ${active ? figmaTokens.colors.primary[500] : figmaTokens.colors.decoration.black0}`,
-        boxSizing: "border-box",
-        display: "flex",
-        alignItems: "center",
-        cursor: isBlocked ? "not-allowed" : "pointer",
-        transition: "all 0.2s ease",
-      }}
+      className={`flex-1 h-[45px] border-0 p-0 flex items-center justify-center box-border cursor-pointer transition-all duration-200 min-w-[120px] md:w-full md:flex-none md:justify-start md:min-w-0 md:border-b-0 ${
+        active 
+          ? "bg-primary-soft border-b-4 border-primary-500 md:border-b-0 md:border-l-4 md:border-primary-500" 
+          : "bg-transparent border-b-4 border-transparent hover:bg-background-app md:border-b-0 md:border-l-4 md:border-transparent"
+      } ${isBlocked ? "cursor-not-allowed opacity-[0.65]" : ""}`}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: figmaTokens.layout.grammarLesson.sidebarItemGap,
-          paddingLeft: figmaTokens.layout.grammarLesson.sidebarItemInsetX,
-          width: 199,
-          boxSizing: "border-box",
-        }}
-      >
-        <div
-          style={{
-            width: figmaTokens.layout.grammarLesson.sidebarItemIconSize,
-            height: figmaTokens.layout.grammarLesson.sidebarItemIconSize,
-            borderRadius:
-              figmaTokens.layout.grammarLesson.sidebarItemIconRadius,
-            background: isDone
-              ? figmaTokens.colors.success.soft
-              : active
-                ? figmaTokens.colors.primary.soft
-                : figmaTokens.colors.background.muted,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: isDone
-              ? figmaTokens.colors.success[500]
-              : active
-                ? figmaTokens.colors.primary[500]
-                : figmaTokens.colors.text.secondary,
-            flexShrink: 0,
-          }}
-        >
-          <span style={figmaTokens.typography.styles.caption}>
-            {item.marker}
-          </span>
-        </div>
+      <div className="flex items-center gap-[10px] px-4 box-border w-full justify-center md:justify-start md:pl-5 md:w-[199px]">
+        <StatusMarker
+          status={isDone ? "done" : active ? "in-progress" : "blocked"}
+          size="sm"
+          content={item.marker}
+        />
 
         <span
-          style={{
-            ...figmaTokens.typography.styles.label,
-            color: active
-              ? figmaTokens.colors.primary[500]
-              : figmaTokens.colors.text.primary,
-            opacity: isBlocked ? 0.65 : 1,
-            whiteSpace: "nowrap",
-          }}
+          className={`text-label whitespace-nowrap ${
+            active ? "text-primary-500" : "text-text-primary"
+          } ${isBlocked ? "opacity-65" : "opacity-100"}`}
         >
           {item.label}
         </span>
@@ -138,7 +77,6 @@ function LessonRow({
   );
 }
 
-import { useState } from "react";
 import type { LessonTopic } from "../../types";
 
 export function LessonSidebar({
@@ -159,38 +97,13 @@ export function LessonSidebar({
   const eyebrowText = activeTopic ? activeTopic.levelText : "LESSON";
 
   return (
-    <aside style={sidebarStyle} data-node-id="8:343" data-name="Sidebar">
-      <div
-        style={{
-          minHeight: figmaTokens.layout.grammarLesson.sidebarBodyHeight,
-          boxSizing: "border-box",
-          paddingTop: figmaTokens.layout.grammarLesson.sidebarTopPaddingY,
-          paddingRight: 1,
-        }}
-      >
-        <div
-          style={{
-            height: figmaTokens.layout.grammarLesson.sidebarHeadingHeight,
-            boxSizing: "border-box",
-            paddingBottom:
-              figmaTokens.layout.grammarLesson.sidebarHeadingGapBottom,
-            paddingLeft: figmaTokens.layout.grammarLesson.sidebarHeadingInsetX,
-            paddingRight: figmaTokens.layout.grammarLesson.sidebarHeadingInsetX,
-          }}
-        >
-          <span style={figmaTokens.typography.styles.eyebrow}>{eyebrowText}</span>
+    <aside className="w-full bg-surface-white border-b border-border-default flex flex-col shrink-0 box-border md:w-[240px] md:h-full md:border-r md:border-b-0" data-node-id="8:343" data-name="Sidebar">
+      <div className="flex flex-col box-border pt-4 w-full md:h-full md:pt-6">
+        <div className="h-9 box-border pb-4 px-5">
+          <span className="text-eyebrow">{eyebrowText}</span>
         </div>
 
-        <div
-          style={{
-            position: "relative",
-            height: figmaTokens.layout.grammarLesson.sidebarListHeight,
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-          data-node-id="8:346"
-          data-name="Inline content"
-        >
+        <div className="flex flex-row overflow-x-auto w-full md:flex-col md:overflow-x-visible md:h-[478px]" data-node-id="8:346" data-name="Inline content">
           {items.map((item) => (
             <LessonRow
               key={item.id}

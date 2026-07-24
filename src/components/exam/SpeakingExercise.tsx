@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { Mic, CheckCircle2 } from "lucide-react";
-import { figmaTokens } from "../../styles/tokens";
 
 type SpeakingExerciseProps = {
   prompt: string;
@@ -17,62 +15,32 @@ export function SpeakingExercise({
   isSubmitted,
   onStartRecording,
 }: SpeakingExerciseProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20, alignItems: "center" }}>
-      <p style={{
-        ...figmaTokens.typography.styles.body,
-        fontSize: 18,
-        color: figmaTokens.colors.text.tertiary,
-        background: figmaTokens.colors.background.app,
-        padding: "16px 20px",
-        borderRadius: figmaTokens.radii.sm,
-        lineHeight: "28px",
-        margin: 0,
-        borderLeft: `4px solid ${figmaTokens.colors.primary[500]}`,
-        width: "100%",
-        boxSizing: "border-box"
-      }}>
+    <div className="flex flex-col gap-5 items-center">
+      <p className="text-bodyLarge text-text-tertiary bg-background-app p-4 px-5 rounded-sm m-0 border-l-4 border-primary-500 w-full box-border text-left">
         {prompt}
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      <div className="flex flex-col items-center gap-4">
         <button
           type="button"
           disabled={isSubmitted || isRecording}
           onClick={onStartRecording}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
           aria-label={isRecording ? "Recording speech" : "Record your voice"}
-          style={{
-            width: 72,
-            height: 72,
-            borderRadius: figmaTokens.radii.full,
-            background: isRecording ? figmaTokens.colors.danger[500] : figmaTokens.colors.primary[500],
-            border: 0,
-            cursor: isSubmitted || isRecording ? "not-allowed" : "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: figmaTokens.colors.text.onPrimary,
-            boxShadow: isRecording 
-              ? "0 4px 16px rgba(242, 78, 78, 0.4)" 
-              : isHovered 
-                ? "0 6px 16px rgba(79, 110, 247, 0.4)" 
-                : "0 4px 12px rgba(79, 110, 247, 0.3)",
-            transform: isHovered && !isSubmitted ? "scale(1.05)" : "scale(1)",
-            transition: "all 0.2s ease",
-            animation: isRecording ? "speakingPulse 1.5s infinite" : "none",
-          }}
+          className={`w-[72px] h-[72px] rounded-full border-0 flex items-center justify-center text-text-onPrimary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 ${
+            isSubmitted || isRecording ? "cursor-not-allowed" : "cursor-pointer hover:scale-105 active:scale-95"
+          } ${
+            isRecording 
+              ? "bg-danger-500 shadow-dangerGlow animate-speakingPulse" 
+              : "bg-primary-500 shadow-primaryGlow hover:shadow-primaryGlowHover"
+          }`}
         >
           <Mic size={32} />
         </button>
 
-        <span style={{ 
-          ...figmaTokens.typography.styles.labelSmall, 
-          color: isRecording ? figmaTokens.colors.danger[500] : figmaTokens.colors.text.secondary 
-        }}>
+        <span className={`text-labelSmall ${
+          isRecording ? "text-danger-500" : "text-text-secondary"
+        }`}>
           {isRecording 
             ? "Recording... speak now" 
             : recordingDone 
@@ -81,34 +49,11 @@ export function SpeakingExercise({
         </span>
         
         {recordingDone && (
-          <div style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            background: figmaTokens.colors.success.soft,
-            color: figmaTokens.colors.success[500],
-            padding: "8px 16px",
-            borderRadius: figmaTokens.radii.full,
-            fontSize: 14,
-            fontWeight: "500",
-            animation: "fadeInUp 0.3s ease",
-          }}>
+          <div className="inline-flex items-center gap-2 bg-success-soft text-success-500 p-2 px-4 rounded-full text-sm font-medium animate-fadeInUp">
             <CheckCircle2 size={16} /> Audio successfully analyzed
           </div>
         )}
       </div>
-
-      <style>{`
-        @keyframes speakingPulse {
-          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(242, 78, 78, 0.4); }
-          70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(242, 78, 78, 0); }
-          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(242, 78, 78, 0); }
-        }
-        @keyframes fadeInUp {
-          from { transform: translateY(8px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }

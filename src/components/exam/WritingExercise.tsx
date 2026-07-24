@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { figmaTokens } from "../../styles/tokens";
-
 type WritingExerciseProps = {
   options: string[];
   selectedWords: string[];
@@ -14,25 +11,11 @@ export function WritingExercise({
   isSubmitted,
   onSelectWord,
 }: WritingExerciseProps) {
-  const [hoveredWord, setHoveredWord] = useState<string | null>(null);
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="flex flex-col gap-5">
       {/* Answer box */}
       <div 
-        style={{
-          minHeight: 56,
-          width: "100%",
-          border: `1.5px dashed ${figmaTokens.colors.border.default}`,
-          background: figmaTokens.colors.background.app,
-          borderRadius: figmaTokens.radii.sm,
-          padding: "12px 16px",
-          boxSizing: "border-box",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 8,
-          alignItems: "center",
-        }}
+        className="min-h-[56px] w-full border-[1.5px] border-dashed border-border-default bg-background-app rounded-sm py-3 px-4 box-border flex flex-wrap gap-2 items-center text-left"
         aria-label="Your constructed sentence"
       >
         {selectedWords.map((word) => (
@@ -41,22 +24,13 @@ export function WritingExercise({
             type="button"
             disabled={isSubmitted}
             onClick={() => onSelectWord(word)}
-            style={{
-              padding: "6px 12px",
-              background: figmaTokens.colors.surface.white,
-              border: `1.5px solid ${figmaTokens.colors.primary[500]}`,
-              borderRadius: figmaTokens.radii.sm,
-              cursor: isSubmitted ? "not-allowed" : "pointer",
-              color: figmaTokens.colors.text.primary,
-              fontSize: 15,
-              fontWeight: "500",
-            }}
+            className="px-3 py-1.5 bg-surface-white border-[1.5px] border-primary-500 rounded-sm text-bodySmall font-medium text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed"
           >
             {word}
           </button>
         ))}
         {selectedWords.length === 0 && (
-          <span style={{ color: figmaTokens.colors.text.secondary, fontSize: 14 }}>
+          <span className="text-text-secondary text-sm">
             Tap the words below to build your sentence...
           </span>
         )}
@@ -64,12 +38,11 @@ export function WritingExercise({
 
       {/* Pool of words */}
       <div 
-        style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}
+        className="flex flex-wrap gap-2 justify-center"
         aria-label="Available words"
       >
         {options.map((word) => {
           const isUsed = selectedWords.includes(word);
-          const isHovered = hoveredWord === word;
 
           return (
             <button
@@ -77,25 +50,11 @@ export function WritingExercise({
               type="button"
               disabled={isSubmitted || isUsed}
               onClick={() => onSelectWord(word)}
-              onMouseEnter={() => setHoveredWord(word)}
-              onMouseLeave={() => setHoveredWord(null)}
-              style={{
-                padding: "10px 18px",
-                background: isUsed 
-                  ? figmaTokens.colors.background.muted 
-                  : isHovered
-                    ? figmaTokens.colors.background.app
-                    : figmaTokens.colors.surface.white,
-                border: `1.5px solid ${isUsed ? "transparent" : figmaTokens.colors.border.default}`,
-                borderRadius: figmaTokens.radii.sm,
-                cursor: isSubmitted || isUsed ? "not-allowed" : "pointer",
-                color: isUsed ? figmaTokens.colors.text.secondary : figmaTokens.colors.text.primary,
-                opacity: isUsed ? 0.5 : 1,
-                fontSize: 15,
-                fontWeight: "500",
-                boxShadow: isUsed ? "none" : "0 2px 4px rgba(0,0,0,0.05)",
-                transition: "all 0.15s ease",
-              }}
+              className={`px-[18px] py-2.5 rounded-sm text-bodySmall font-medium transition-all ${
+                isSubmitted || isUsed
+                  ? "bg-background-muted text-text-secondary border-transparent opacity-50 cursor-not-allowed shadow-none"
+                  : "bg-surface-white border-[1.5px] border-border-default text-text-primary hover:bg-background-app cursor-pointer shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
+              }`}
             >
               {word}
             </button>

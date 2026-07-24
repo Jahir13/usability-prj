@@ -11,9 +11,10 @@ import { FeedbackModal } from "../../components/exam/FeedbackModal";
 import { PauseModal } from "../../components/exam/PauseModal";
 import { ResultsSummaryPage } from "../../components/exam/ResultsSummaryPage";
 import { AppHeader } from "../../components/layout/AppHeader";
-import { figmaTokens } from "../../styles/tokens";
 import { ArrowRight } from "lucide-react";
 import type { ActiveSkill } from "../../types";
+import { Button } from "../../components/ui/Button";
+import { Card } from "../../components/ui/Card";
 
 type InteractiveExercisePageProps = {
   levelId: string;
@@ -67,7 +68,7 @@ export function InteractiveExercisePage({
   }, [session.currentExerciseIndex]);
 
   if (!currentQuestion) {
-    return <div style={{ padding: 40, textAlign: "center" }}>Loading lesson...</div>;
+    return <div className="p-10 text-center">Loading lesson...</div>;
   }
 
   const checkAnswer = () => {
@@ -144,9 +145,9 @@ export function InteractiveExercisePage({
 
   if (session.isFinished) {
     return (
-      <div style={{ minHeight: "100vh", background: figmaTokens.colors.background.app }}>
+      <div className="min-h-screen bg-background-app">
         <AppHeader variant="default" onHomeClick={() => onNavigate("#/dashboard")} />
-        <main style={{ padding: "80px 24px", boxSizing: "border-box" }}>
+        <main className="py-20 px-6 box-border">
           <ResultsSummaryPage
             score={correctCount}
             total={session.exercises.length}
@@ -168,7 +169,7 @@ export function InteractiveExercisePage({
     (currentQuestion.type === "listening" && !inputText);
 
   return (
-    <div style={{ minHeight: "100vh", background: figmaTokens.colors.background.app }}>
+    <div className="min-h-screen bg-background-app">
       <AppHeader
         variant="exercise"
         progress={progressPercent}
@@ -176,55 +177,27 @@ export function InteractiveExercisePage({
         onPause={() => togglePause(true)}
       />
 
-      <main style={{ 
-        paddingTop: figmaTokens.layout.headerHeight, 
-        paddingLeft: 24, 
-        paddingRight: 24, 
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
-      }}>
-        <div style={{
-          maxWidth: 680,
-          width: "100%",
-          margin: "40px auto",
-          background: figmaTokens.colors.surface.white,
-          borderRadius: figmaTokens.layout.grammarLesson.cardRadius,
-          border: `${figmaTokens.borderWidths.hairline}px solid ${figmaTokens.colors.border.default}`,
-          boxShadow: figmaTokens.layout.learningPath.unitCardShadow,
-          padding: 32,
-          boxSizing: "border-box",
-          display: "flex",
-          flexDirection: "column",
-          gap: 24,
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ ...figmaTokens.typography.styles.eyebrow, color: figmaTokens.colors.primary[500] }}>
+      <main className="pt-16 px-4 md:px-8 box-border flex flex-col items-center">
+        <Card className="max-w-[680px] w-full mx-auto my-10 p-8 flex flex-col gap-6">
+          <div className="flex justify-between text-left">
+            <span className="text-eyebrow text-primary-500">
               EXERCISE {session.currentExerciseIndex + 1} OF {session.exercises.length}
             </span>
-            <span style={{ 
-              ...figmaTokens.typography.styles.labelSmall, 
-              color: remainingTime < CONFIG.TIMER.WARNING_THRESHOLD_SECONDS ? figmaTokens.colors.danger[500] : figmaTokens.colors.text.secondary 
-            }}>
+            <span className={`text-labelSmall ${
+              remainingTime < CONFIG.TIMER.WARNING_THRESHOLD_SECONDS ? "text-danger-500" : "text-text-secondary"
+            }`}>
               ⏱️ {Math.floor(remainingTime / 60)}:{(remainingTime % 60).toString().padStart(2, "0")}
             </span>
           </div>
 
-          <div>
-            <h2 style={{ 
-              fontFamily: figmaTokens.typography.families.heading,
-              fontWeight: figmaTokens.typography.weights.bold,
-              fontSize: 20,
-              color: figmaTokens.colors.text.primary,
-              margin: "0 0 12px 0"
-            }}>
+          <div className="text-left">
+            <h2 className="font-heading font-bold text-[20px] text-text-primary m-0 mb-3 text-left">
               {currentQuestion.instruction}
             </h2>
           </div>
 
           {/* Render specific question presentation elements */}
-          <div style={{ minHeight: 120 }}>
+          <div className="min-h-[120px]">
             {currentQuestion.type === "choice" && currentQuestion.options && (
               <ChoiceExercise
                 prompt={currentQuestion.prompt}
@@ -278,68 +251,42 @@ export function InteractiveExercisePage({
             />
           )}
 
-          <div style={{ display: "flex", gap: 16 }}>
-            <button
+          <div className="flex gap-4 w-full">
+            <Button
               type="button"
               onClick={() => togglePause(true)}
-              style={{
-                height: 52,
-                borderRadius: figmaTokens.layout.grammarLesson.startButtonRadius,
-                border: `${figmaTokens.borderWidths.hairline}px solid ${figmaTokens.colors.border.default}`,
-                background: figmaTokens.colors.surface.white,
-                color: figmaTokens.colors.text.secondary,
-                flex: 1,
-                fontWeight: figmaTokens.typography.weights.medium,
-                cursor: "pointer",
-              }}
+              variant="secondary"
+              size="lg"
+              className="flex-1 font-medium"
             >
               Quit
-            </button>
+            </Button>
 
             {!isSubmitted ? (
-              <button
+              <Button
                 type="button"
                 onClick={checkAnswer}
                 disabled={isCheckDisabled}
-                style={{
-                  height: 52,
-                  borderRadius: figmaTokens.layout.grammarLesson.startButtonRadius,
-                  border: 0,
-                  background: figmaTokens.colors.primary[500],
-                  color: figmaTokens.colors.text.onPrimary,
-                  flex: 2,
-                  fontWeight: figmaTokens.typography.weights.bold,
-                  cursor: isCheckDisabled ? "not-allowed" : "pointer",
-                  opacity: isCheckDisabled ? 0.6 : 1,
-                }}
+                variant="primary"
+                size="lg"
+                className="flex-[2]"
               >
                 Check Answer
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
                 type="button"
                 onClick={nextExercise}
-                style={{
-                  height: 52,
-                  borderRadius: figmaTokens.layout.grammarLesson.startButtonRadius,
-                  border: 0,
-                  background: figmaTokens.colors.success[500],
-                  color: figmaTokens.colors.text.onPrimary,
-                  flex: 2,
-                  fontWeight: figmaTokens.typography.weights.bold,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                }}
+                variant="primary"
+                size="lg"
+                className="bg-success-500 shadow-[0_6px_10px_rgba(60,201,122,0.35)] hover:shadow-[0_6px_20px_rgba(60,201,122,0.4)] focus-visible:ring-success-500 flex-[2] inline-flex items-center justify-center gap-2"
               >
                 Continue
                 <ArrowRight size={18} />
-              </button>
+              </Button>
             )}
           </div>
-        </div>
+        </Card>
       </main>
 
       <PauseModal

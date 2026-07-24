@@ -1,76 +1,33 @@
-import type { CSSProperties, ReactNode } from "react";
-import { figmaTokens } from "../../styles/tokens";
+import type { ReactNode } from "react";
+import { Card } from "../ui/Card";
 
 type RuleCardProps = {
-  title: string;
+  title?: string;
   formula: ReactNode;
+  formulaLabel: string;
 };
 
-const cardStyle: CSSProperties = {
-  width: "100%",
-  minHeight: 152,
-  background: figmaTokens.colors.background.elevated,
-  borderLeft: `${figmaTokens.layout.grammarLesson.ruleCardBorderWidth}px solid ${figmaTokens.colors.primary[500]}`,
-  borderRadius: figmaTokens.layout.grammarLesson.cardRadius,
-  padding: `${figmaTokens.layout.grammarLesson.ruleCardInnerPaddingY}px ${figmaTokens.layout.grammarLesson.ruleCardInnerPaddingX}px ${figmaTokens.layout.grammarLesson.ruleCardInnerPaddingY}px ${figmaTokens.layout.grammarLesson.ruleCardInnerPaddingX}px`,
-  boxSizing: "border-box",
-};
-
-export function RuleCard({ title, formula }: RuleCardProps) {
+export function RuleCard({ title = "MAIN RULE", formula, formulaLabel }: RuleCardProps) {
   return (
-    <section style={cardStyle} data-node-id="81:33" data-name="Container">
-      <div
-        style={{
-          paddingBottom:
-            figmaTokens.layout.grammarLesson.ruleCardTitleGapBottom,
-          boxSizing: "border-box",
-        }}
-      >
-        <span
-          style={figmaTokens.typography.styles.eyebrow}
-          data-node-id="81:37"
-        >
+    <Card variant="elevated" className="w-full min-h-[120px] py-6 px-[28px] text-left">
+      <div className="pb-3 text-left">
+        <span className="text-eyebrow text-text-secondary">
           {title}
         </span>
       </div>
 
-      <div data-node-id="81:38" style={{ boxSizing: "border-box" }}>
+      <div className="box-border text-left">
         {formula}
       </div>
 
-      <div style={{ paddingTop: 12, boxSizing: "border-box" }}>
-        <div
-          style={{
-            background: figmaTokens.colors.surface.white,
-            borderRadius:
-              figmaTokens.layout.grammarLesson.ruleFormulaChipRadius,
-            paddingLeft:
-              figmaTokens.layout.grammarLesson.ruleFormulaChipPaddingX,
-            paddingRight:
-              figmaTokens.layout.grammarLesson.ruleFormulaChipPaddingX,
-            paddingTop:
-              figmaTokens.layout.grammarLesson.ruleFormulaChipPaddingY,
-            paddingBottom:
-              figmaTokens.layout.grammarLesson.ruleFormulaChipPaddingY,
-            boxSizing: "border-box",
-            display: "inline-flex",
-            alignItems: "center",
-          }}
-          data-node-id="81:41"
-          data-name="Container"
-        >
-          <span
-            style={{
-              ...figmaTokens.typography.styles.mono,
-              color: figmaTokens.colors.text.primary,
-              whiteSpace: "nowrap",
-            }}
-            data-node-id="81:42"
-          >
-            Subject + am/is/are + complement
+      <div className="pt-3 box-border text-left">
+        <div className="bg-surface-white rounded-xl px-3 py-2 box-border inline-flex items-center">
+          <span className="text-mono text-text-primary whitespace-nowrap">
+            {formulaLabel}
           </span>
         </div>
       </div>
-    </section>
+    </Card>
   );
 }
+

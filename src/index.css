@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -11,9 +16,9 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
@@ -50,20 +55,21 @@
   }
 }
 
+html,
+body,
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
   text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-}
-
-body {
-  margin: 0;
 }
 
 h1,
@@ -114,3 +120,34 @@ code {
   outline: 2px solid #4f6ef7 !important;
   outline-offset: 2px !important;
 }
+
+@utility text-brand {
+  font-family: var(--heading);
+}
+@utility text-avatarInitials {
+  font-family: var(--heading);
+}
+@utility text-heroTitle {
+  font-family: var(--heading);
+}
+@utility text-onboardingTitle {
+  font-family: var(--heading);
+}
+@utility text-learningPathTitle {
+  font-family: var(--heading);
+}
+@utility text-learningPathLevelTitle {
+  font-family: var(--heading);
+}
+@utility text-sectionTitle {
+  font-family: var(--heading);
+}
+@utility text-eyebrow {
+  font-family: var(--heading);
+}
+@utility text-mono {
+  font-family: var(--mono);
+}
+
+
+

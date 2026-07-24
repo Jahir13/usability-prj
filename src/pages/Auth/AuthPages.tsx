@@ -1,6 +1,7 @@
-import { useState, type CSSProperties, type ChangeEvent, type FormEvent } from "react";
-import { figmaTokens } from "../../styles/tokens";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { GraduationCap } from "lucide-react";
+import { Button } from "../../components/ui/Button";
+import { Input } from "../../components/ui/Input";
 
 // --- WELCOME PAGE ---
 type WelcomePageProps = {
@@ -8,96 +9,31 @@ type WelcomePageProps = {
 };
 
 export function WelcomePage({ onStart }: WelcomePageProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const containerStyle: CSSProperties = {
-    position: "relative",
-    width: "100%",
-    minHeight: figmaTokens.layout.onboardingModal.backdropMinHeight,
-    background: figmaTokens.colors.background.app,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    boxSizing: "border-box",
-  };
-
-  const cardStyle: CSSProperties = {
-    width: figmaTokens.layout.onboardingModal.cardWidth,
-    height: figmaTokens.layout.onboardingModal.cardHeight,
-    borderRadius: figmaTokens.layout.onboardingModal.cardRadius,
-    background: figmaTokens.colors.surface.white,
-    boxShadow: figmaTokens.layout.onboardingModal.cardShadow,
-    boxSizing: "border-box",
-    padding: 32,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 32,
-    textAlign: "center",
-  };
-
   return (
-    <div style={containerStyle}>
-      <div style={cardStyle}>
-        <div style={{
-          width: 80,
-          height: 80,
-          borderRadius: figmaTokens.radii.full,
-          background: figmaTokens.colors.primary.soft,
-          color: figmaTokens.colors.primary[500],
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}>
+    <div className="relative w-full min-h-screen bg-welcomeBackground flex items-center justify-center box-border">
+      <div className="w-[720px] h-[472px] rounded-[24px] bg-surface-white shadow-[0px_4px_16px_rgba(26,29,46,0.08)] box-border p-8 flex flex-col items-center justify-center gap-8 text-center">
+        <div className="w-20 h-20 rounded-full bg-primary-soft text-primary-500 flex items-center justify-center">
           <GraduationCap size={44} />
         </div>
 
         <div>
-          <h1 style={{
-            fontFamily: figmaTokens.typography.families.heading,
-            fontWeight: figmaTokens.typography.weights.extraBold,
-            fontSize: 32,
-            color: figmaTokens.colors.text.primary,
-            margin: "0 0 12px 0",
-          }}>
+          <h1 className="font-heading font-extrabold text-[32px] text-text-primary m-0 mb-3">
             LingoGuru
           </h1>
-          <p style={{
-            ...figmaTokens.typography.styles.body,
-            color: figmaTokens.colors.text.secondary,
-            maxWidth: 320,
-            margin: 0,
-            lineHeight: "24px",
-          }}>
+          <p className="text-body text-text-secondary max-w-[320px] m-0">
             Master English at your own pace through quick, bite-sized daily exercises.
           </p>
         </div>
 
-        <button
+        <Button
           type="button"
           onClick={onStart}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          style={{
-            width: "100%",
-            height: 52,
-            borderRadius: figmaTokens.layout.onboardingModal.actionRadius,
-            background: figmaTokens.colors.primary[500],
-            color: figmaTokens.colors.text.onPrimary,
-            border: 0,
-            fontSize: 16,
-            fontWeight: figmaTokens.typography.weights.bold,
-            cursor: "pointer",
-            boxShadow: isHovered 
-              ? "0 6px 20px rgba(79, 110, 247, 0.4)" 
-              : figmaTokens.shadows.primaryCta,
-            transform: isHovered ? "scale(1.02)" : "scale(1)",
-            transition: "all 0.2s ease",
-          }}
+          variant="primary"
+          size="lg"
+          className="w-full"
         >
           Get Started →
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -114,7 +50,6 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nativeLanguage, setNativeLanguage] = useState("Spanish");
-  const [isHovered, setIsHovered] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = (e: FormEvent) => {
@@ -152,154 +87,79 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
     }
   };
 
-  const containerStyle: CSSProperties = {
-    position: "relative",
-    width: "100%",
-    minHeight: figmaTokens.layout.onboardingModal.backdropMinHeight,
-    background: figmaTokens.colors.background.app,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    boxSizing: "border-box",
-  };
-
-  const cardStyle: CSSProperties = {
-    width: figmaTokens.layout.onboardingModal.cardWidth,
-    minHeight: figmaTokens.layout.onboardingModal.cardHeight,
-    borderRadius: figmaTokens.layout.onboardingModal.cardRadius,
-    background: figmaTokens.colors.surface.white,
-    boxShadow: figmaTokens.layout.onboardingModal.cardShadow,
-    boxSizing: "border-box",
-    padding: "36px 32px",
-    display: "flex",
-    flexDirection: "column",
-    gap: 20,
-  };
-
-  const inputStyle: CSSProperties = {
-    width: "100%",
-    padding: "12px 16px",
-    borderRadius: figmaTokens.radii.sm,
-    border: `1.5px solid ${figmaTokens.colors.border.default}`,
-    fontSize: 15,
-    fontFamily: figmaTokens.typography.families.body,
-    outline: "none",
-    boxSizing: "border-box",
-    color: figmaTokens.colors.text.primary,
-    background: figmaTokens.colors.surface.white,
-  };
-
-  const selectStyle: CSSProperties = {
-    ...inputStyle,
-    appearance: "none",
-    backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='currentColor' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "right 12px center",
-    paddingRight: "40px",
-    cursor: "pointer",
-  };
-
   return (
-    <div style={containerStyle}>
-      <form onSubmit={handleSubmit} style={cardStyle}>
-        <div style={{ textAlign: "center" }}>
-          <h2 style={{
-            fontFamily: figmaTokens.typography.families.heading,
-            fontWeight: figmaTokens.typography.weights.bold,
-            fontSize: 24,
-            color: figmaTokens.colors.text.primary,
-            margin: "0 0 4px 0",
-          }}>
+    <div className="relative w-full min-h-screen bg-welcomeBackground flex items-center justify-center box-border">
+      <form onSubmit={handleSubmit} className="w-[720px] min-h-[472px] rounded-[24px] bg-surface-white shadow-[0px_4px_16px_rgba(26,29,46,0.08)] box-border py-9 px-8 flex flex-col gap-5 text-left">
+        <div className="text-center">
+          <h2 className="font-heading font-bold text-2xl text-text-primary m-0 mb-1">
             {mode === "register" ? "Create Profile" : "Welcome Back"}
           </h2>
-          <p style={{
-            ...figmaTokens.typography.styles.bodySmall,
-            color: figmaTokens.colors.text.secondary,
-            margin: 0,
-          }}>
+          <p className="text-bodySmall text-text-secondary m-0">
             {mode === "register"
               ? "Join LingoGuru and track your milestones!"
               : "Log in to continue your English learning journey!"}
           </p>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
+        <div className="flex flex-col gap-[14px] flex-1">
           {mode === "register" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="auth-fullname"
-                style={{
-                  ...figmaTokens.typography.styles.labelSmall,
-                  color: figmaTokens.colors.text.tertiary,
-                }}
+                className="text-labelSmall text-text-tertiary"
               >
                 Full Name
               </label>
-              <input
+              <Input
                 id="auth-fullname"
                 type="text"
                 placeholder="e.g. María Aguilar"
                 value={fullName}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
-                style={inputStyle}
-                className="auth-input"
                 aria-required="true"
               />
             </div>
           )}
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div className="flex flex-col gap-1.5">
             <label
               htmlFor="auth-email"
-              style={{
-                ...figmaTokens.typography.styles.labelSmall,
-                color: figmaTokens.colors.text.tertiary,
-              }}
+              className="text-labelSmall text-text-tertiary"
             >
               Email Address
             </label>
-            <input
+            <Input
               id="auth-email"
               type="email"
               placeholder="e.g. maria@example.com"
               value={email}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-              style={inputStyle}
-              className="auth-input"
               aria-required="true"
             />
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div className="flex flex-col gap-1.5">
             <label
               htmlFor="auth-password"
-              style={{
-                ...figmaTokens.typography.styles.labelSmall,
-                color: figmaTokens.colors.text.tertiary,
-              }}
+              className="text-labelSmall text-text-tertiary"
             >
               Password
             </label>
-            <input
+            <Input
               id="auth-password"
               type="password"
               placeholder="••••••••"
               value={password}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-              style={inputStyle}
-              className="auth-input"
               aria-required="true"
             />
           </div>
 
           {mode === "register" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="auth-language"
-                style={{
-                  ...figmaTokens.typography.styles.labelSmall,
-                  color: figmaTokens.colors.text.tertiary,
-                }}
+                className="text-labelSmall text-text-tertiary"
               >
                 Native Language
               </label>
@@ -307,8 +167,8 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
                 id="auth-language"
                 value={nativeLanguage}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setNativeLanguage(e.target.value)}
-                style={selectStyle}
-                className="auth-input"
+                className="w-full p-3 px-4 rounded-sm border-[1.5px] border-border-default text-[15px] font-body outline-none box-border text-text-primary bg-surface-white appearance-none bg-no-repeat bg-[right_12px_center] pr-10 cursor-pointer focus-visible:border-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500/20"
+                style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='currentColor' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")` }}
               >
                 <option value="Spanish">Spanish (Español)</option>
                 <option value="Portuguese">Portuguese (Português)</option>
@@ -322,12 +182,7 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
           {error && (
             <span
               id="auth-error"
-              style={{
-                color: figmaTokens.colors.danger[500],
-                fontSize: 13,
-                fontWeight: "500",
-                textAlign: "center"
-              }}
+              className="text-danger-500 text-[13px] font-medium text-center"
               role="alert"
               aria-live="assertive"
             >
@@ -336,61 +191,32 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
           )}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
-          <button
+        <div className="flex flex-col gap-3 mt-3">
+          <Button
             type="submit"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            style={{
-              width: "100%",
-              height: 52,
-              borderRadius: figmaTokens.layout.onboardingModal.actionRadius,
-              background: figmaTokens.colors.primary[500],
-              color: figmaTokens.colors.text.onPrimary,
-              border: 0,
-              fontSize: 16,
-              fontWeight: figmaTokens.typography.weights.bold,
-              cursor: "pointer",
-              boxShadow: isHovered
-                ? "0 6px 20px rgba(79, 110, 247, 0.4)"
-                : figmaTokens.shadows.primaryCta,
-              transform: isHovered ? "scale(1.02)" : "scale(1)",
-              transition: "all 0.2s ease",
-            }}
+            variant="primary"
+            size="lg"
+            className="w-full"
           >
             {mode === "register" ? "Create Profile" : "Log In"}
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={() => {
               setMode(prev => prev === "register" ? "login" : "register");
               setError("");
             }}
-            style={{
-              background: "transparent",
-              border: 0,
-              color: figmaTokens.colors.primary[500],
-              fontSize: 14,
-              fontWeight: figmaTokens.typography.weights.medium,
-              cursor: "pointer",
-              textAlign: "center",
-              padding: "4px 0",
-              textDecoration: "underline",
-            }}
+            className="w-full text-primary-500 font-medium text-center py-1 underline hover:opacity-80 transition-opacity"
           >
             {mode === "register"
               ? "Already have an account? Log in"
               : "Don't have an account? Sign up"}
-          </button>
+          </Button>
         </div>
       </form>
-      <style>{`
-        .auth-input:focus {
-          border-color: ${figmaTokens.colors.primary[500]} !important;
-          box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.2) !important;
-        }
-      `}</style>
     </div>
   );
 }

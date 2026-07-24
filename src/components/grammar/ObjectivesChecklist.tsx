@@ -1,5 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
-import { figmaTokens } from "../../styles/tokens";
+import type { ReactNode } from "react";
 
 type ObjectivesChecklistProps = {
   levelText: string;
@@ -8,50 +7,13 @@ type ObjectivesChecklistProps = {
   objectives: string[];
 };
 
-const cardStyle: CSSProperties = {
-  width: "100%",
-  height: figmaTokens.layout.grammarLesson.levelCardHeight,
-  borderRadius: figmaTokens.layout.grammarLesson.cardRadius,
-  background: figmaTokens.colors.surface.white,
-  boxSizing: "border-box",
-};
-
 function ObjectiveItem({ children }: { children: ReactNode }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "flex-start",
-        gap: figmaTokens.layout.grammarLesson.objectivesItemGap,
-        boxSizing: "border-box",
-      }}
-    >
-      <div
-        style={{
-          width: figmaTokens.layout.grammarLesson.objectivesIconSize,
-          height: figmaTokens.layout.grammarLesson.objectivesIconSize,
-          marginTop: figmaTokens.layout.grammarLesson.objectivesIconOffsetTop,
-          borderRadius:
-            figmaTokens.layout.grammarLesson.objectivesIconBorderRadius,
-          background: figmaTokens.colors.warning[500],
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: figmaTokens.colors.text.onPrimary,
-          flexShrink: 0,
-        }}
-      >
-        <span style={figmaTokens.typography.styles.caption}>✓</span>
+    <div className="flex items-start gap-3 box-border">
+      <div className="w-[22px] h-[22px] mt-0.5 rounded-full bg-warning-500 flex items-center justify-center text-text-onPrimary shrink-0">
+        <span className="text-caption">✓</span>
       </div>
-      <p
-        style={{
-          ...figmaTokens.typography.styles.bodySmall,
-          color: figmaTokens.colors.text.primary,
-          lineHeight: `${figmaTokens.layout.grammarLesson.objectivesTextLineHeight}px`,
-          margin: 0,
-          whiteSpace: "nowrap",
-        }}
-      >
+      <p className="text-bodySmall text-text-primary leading-[22.5px] m-0 whitespace-nowrap">
         {children}
       </p>
     </div>
@@ -65,72 +27,32 @@ export function ObjectivesChecklist({
   objectives,
 }: ObjectivesChecklistProps) {
   return (
-    <section style={cardStyle} data-node-id="81:4" data-name="Container">
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          boxSizing: "border-box",
-          padding: `${figmaTokens.layout.grammarLesson.levelCardPaddingY}px ${figmaTokens.layout.grammarLesson.levelCardPaddingX}px`,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <div style={{ paddingBottom: 24, boxSizing: "border-box" }}>
+    <section className="w-full min-h-[396px] rounded-lg bg-surface-white box-border text-left" data-node-id="81:4" data-name="Container">
+      <div className="w-full min-h-[396px] box-border py-8 px-16 flex flex-col justify-center">
+        <div className="pb-6 box-border">
           <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              height: figmaTokens.layout.grammarLesson.levelBadgeHeight,
-              paddingLeft: figmaTokens.layout.grammarLesson.levelBadgePaddingX,
-              paddingRight: figmaTokens.layout.grammarLesson.levelBadgePaddingX,
-              borderRadius: figmaTokens.layout.grammarLesson.levelBadgeRadius,
-              background: figmaTokens.layout.grammarLesson.levelBadgeBackground,
-              boxSizing: "border-box",
-            }}
+            className="inline-flex items-center h-[26px] px-3 rounded-full bg-primary-soft text-primary-500 box-border"
             data-node-id="81:6"
             data-name="Text"
           >
-            <span style={figmaTokens.typography.styles.captionUppercase}>
+            <span className="text-captionUppercase">
               {levelText}
             </span>
           </div>
         </div>
 
-        <div
-          style={{ paddingBottom: 16, boxSizing: "border-box" }}
-          data-node-id="81:8"
-        >
+        <div className="pb-4 box-border" data-node-id="81:8">
           <h1
-            style={{
-              ...figmaTokens.typography.styles.sectionTitle,
-              fontSize: figmaTokens.layout.grammarLesson.levelTitleSize,
-              lineHeight: `${figmaTokens.layout.grammarLesson.levelTitleLineHeight}px`,
-              color: figmaTokens.colors.text.primary,
-              margin: 0,
-              whiteSpace: "nowrap",
-            }}
+            className="text-sectionTitle text-[40px] leading-[46px] text-text-primary m-0 whitespace-nowrap"
             data-node-id="81:10"
           >
             {title}
           </h1>
         </div>
 
-        <div
-          style={{
-            paddingBottom: figmaTokens.layout.grammarLesson.levelIntroBottomGap,
-            boxSizing: "border-box",
-          }}
-          data-node-id="81:11"
-        >
+        <div className="pb-8 box-border" data-node-id="81:11">
           <p
-            style={{
-              ...figmaTokens.typography.styles.body,
-              color: figmaTokens.colors.text.primary,
-              maxWidth: figmaTokens.layout.grammarLesson.levelIntroMaxWidth,
-              margin: 0,
-            }}
+            className="text-body text-text-primary max-w-[420px] m-0"
             data-node-id="81:13"
           >
             {description}
@@ -138,12 +60,7 @@ export function ObjectivesChecklist({
         </div>
 
         <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: figmaTokens.layout.grammarLesson.objectivesGap,
-            boxSizing: "border-box",
-          }}
+          className="flex flex-col gap-3 box-border"
           data-node-id="81:14"
         >
           {objectives.map((objective) => (

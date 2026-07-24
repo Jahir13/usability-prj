@@ -178,3 +178,21 @@ export const EXERCISES_DATABASE: Record<string, Exercise[]> = {
     },
   ],
 };
+
+// Fallback mappings to populate all other level IDs and prevent "Level data not found" crashes
+const allLevelIds = [
+  "basic-greetings", "simple-present", "pronouns", "verb-to-be", "basic-questions", "present-continuous", "simple-past",
+  "speaking-l1", "speaking-l2", "speaking-l3", "speaking-l4",
+  "listening-l1", "listening-l2", "listening-l3", "listening-l4",
+  "writing-l1", "writing-l2", "writing-l3", "writing-l4"
+];
+
+for (const id of allLevelIds) {
+  if (!LESSONS_DATABASE[id]) {
+    LESSONS_DATABASE[id] = LESSONS_DATABASE["verb-to-be"];
+  }
+  if (!EXERCISES_DATABASE[id]) {
+    EXERCISES_DATABASE[id] = EXERCISES_DATABASE["verb-to-be"];
+  }
+}
+

@@ -1,6 +1,4 @@
-import type { CSSProperties } from "react";
 import { AppHeader } from "../../components/layout/AppHeader";
-import { figmaTokens } from "../../styles/tokens";
 import {
   SkillTabSidebar,
   type ActiveSkill,
@@ -8,6 +6,7 @@ import {
 import { AccumulatedProgressBar } from "../../components/learningpath/AccumulatedProgressBar";
 import { ThematicUnit } from "../../components/learningpath/ThematicUnit";
 import { useProgress } from "../../context/LingoContext";
+import type { LevelStatus } from "../../components/learningpath/LevelNode";
 
 type LearningPathPageProps = {
   activeSkill: ActiveSkill;
@@ -21,15 +20,6 @@ const skillLabels: Record<ActiveSkill, { icon: string; label: string }> = {
   speaking: { icon: "🎤", label: "Speaking" },
   listening: { icon: "👂", label: "Listening" },
   writing: { icon: "✍️", label: "Writing" },
-};
-
-const pageStyle: CSSProperties = {
-  position: "relative",
-  width: "100%",
-  minHeight: figmaTokens.layout.learningPath.pageHeight,
-  background: figmaTokens.colors.background.app,
-  boxSizing: "border-box",
-  overflow: "hidden",
 };
 
 export function LearningPathPage({ 
@@ -47,7 +37,7 @@ export function LearningPathPage({
 
   return (
     <div
-      style={pageStyle}
+      className="relative w-full min-h-screen bg-background-app box-border overflow-hidden"
       data-node-id="12:1589"
       data-name="Home / Ruta de Aprendizaje Speaking"
     >
@@ -55,126 +45,41 @@ export function LearningPathPage({
         onHomeClick={() => onNavigate("#/dashboard")} 
         onProfileClick={() => onNavigate("#/profile")}
       />
-      <div
-        style={{
-          display: "flex",
-          alignItems: "stretch",
-          width: "100%",
-          paddingTop: figmaTokens.layout.learningPath.headerHeight,
-          boxSizing: "border-box",
-        }}
-      >
+      <div className="flex flex-col w-full box-border pt-16 md:flex-row md:items-stretch md:min-h-[calc(100vh-64px)]">
         <SkillTabSidebar activeSkill={activeSkill} onSkillChange={onSkillChange} />
 
-        <main
-          style={{
-            flex: "1 1 auto",
-            minWidth: 0,
-            maxWidth: figmaTokens.layout.learningPath.mainMaxWidth,
-            boxSizing: "border-box",
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              minHeight: figmaTokens.layout.learningPath.sidebarBodyHeight,
-              padding: figmaTokens.layout.learningPath.mainPadding,
-              boxSizing: "border-box",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: figmaTokens.layout.learningPath.learningPathHeaderGap,
-                width: "100%",
-                boxSizing: "border-box",
-              }}
-            >
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: figmaTokens.radii.full,
-                  background: figmaTokens.colors.background.subtle,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <span
-                  style={figmaTokens.typography.styles.learningPathSkillEmoji}
-                >
+        <main className="flex-1 min-w-0 max-w-[800px] box-border w-full flex flex-col items-center overflow-y-auto">
+          <div className="w-full box-border p-4 md:p-8 flex flex-col">
+            <div className="flex items-center gap-3 w-full box-border text-left">
+              <div className="w-10 h-10 rounded-full bg-background-subtle flex items-center justify-center shrink-0">
+                <span className="text-learningPathSkillEmoji text-text-primary">
                   {activeSkillMeta.icon}
                 </span>
               </div>
-              <h1 style={figmaTokens.typography.styles.learningPathTitle}>
+              <h1 className="text-learningPathTitle text-text-primary text-left m-0">
                 {activeSkillMeta.label}
               </h1>
             </div>
 
-            <div
-              style={{
-                paddingTop:
-                  figmaTokens.layout.learningPath.learningPathSectionGapTop,
-                boxSizing: "border-box",
-              }}
-            >
+            <div className="pt-6 box-border">
               <AccumulatedProgressBar progress={progressPercent} />
             </div>
 
-            <div
-              style={{
-                paddingTop:
-                  figmaTokens.layout.learningPath.learningPathSectionGapTop,
-                boxSizing: "border-box",
-              }}
-            >
-              <div
-                style={{
-                  ...figmaTokens.typography.styles.learningPathHeading,
-                  color: figmaTokens.colors.text.secondary,
-                }}
-              >
+            <div className="pt-6 box-border text-left">
+              <div className="text-learningPathHeading text-text-secondary text-left">
                 Learning Path
               </div>
             </div>
 
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                paddingLeft: 40,
-                paddingTop: 20,
-                boxSizing: "border-box",
-              }}
-            >
+            <div className="relative w-full pl-10 pt-5 box-border">
               <div
                 aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  left: figmaTokens.layout.learningPath.levelConnectorLeft,
-                  top: figmaTokens.layout.learningPath.levelConnectorTop,
-                  width: figmaTokens.layout.learningPath.levelConnectorWidth,
-                  height: figmaTokens.layout.learningPath.levelConnectorHeight,
-                  background: figmaTokens.colors.background.muted,
-                  zIndex: figmaTokens.layout.learningPath.levelConnectorZIndex,
-                }}
+                className="absolute left-[23px] top-[44px] w-[2px] h-[458px] bg-background-muted z-0"
                 data-node-id="12:1709"
                 data-name="Container"
               />
 
-              <div
-                style={{
-                  position: "relative",
-                  zIndex: figmaTokens.layout.learningPath.levelContentZIndex,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: figmaTokens.spacing[16],
-                  boxSizing: "border-box",
-                }}
-              >
+              <div className="relative z-10 flex flex-col gap-4 box-border">
                 {units.map((unit) => {
                   const mappedLevels = unit.levels.map((level) => ({
                     ...level,
@@ -182,7 +87,7 @@ export function LearningPathPage({
                       ? "done" 
                       : level.status === "current" 
                         ? "in-progress" 
-                        : "blocked") as any
+                        : "blocked") as LevelStatus
                   }));
                   return (
                     <ThematicUnit
@@ -196,24 +101,9 @@ export function LearningPathPage({
               </div>
             </div>
 
-            <div
-              style={{
-                paddingTop: figmaTokens.layout.learningPath.footerPaddingTop,
-                boxSizing: "border-box",
-              }}
-            >
-              <div
-                style={{
-                  borderTop: `${figmaTokens.borderWidths.hairline}px solid ${figmaTokens.colors.border.default}`,
-                  paddingTop: figmaTokens.layout.learningPath.footerDividerTop,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  boxSizing: "border-box",
-                }}
-              >
-                <span style={figmaTokens.typography.styles.caption}>
+            <div className="pt-10 box-border">
+              <div className="border-t border-border-default pt-6 flex justify-center items-center w-full box-border">
+                <span className="text-caption text-text-secondary">
                   © 2026 LingoGuru
                 </span>
               </div>

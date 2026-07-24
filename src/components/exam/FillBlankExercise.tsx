@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { figmaTokens } from "../../styles/tokens";
+import { Input } from "../ui/Input";
 
 type FillBlankExerciseProps = {
   prompt: string;
@@ -19,32 +19,19 @@ export function FillBlankExercise({
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <p style={{
-        ...figmaTokens.typography.styles.body,
-        fontSize: 18,
-        color: figmaTokens.colors.text.tertiary,
-        background: figmaTokens.colors.background.app,
-        padding: "16px 20px",
-        borderRadius: figmaTokens.radii.sm,
-        lineHeight: "28px",
-        margin: 0,
-        borderLeft: `4px solid ${figmaTokens.colors.primary[500]}`,
-      }}>
+    <div className="flex flex-col gap-4">
+      <p className="text-bodyLarge text-text-tertiary bg-background-app p-4 px-5 rounded-sm m-0 border-l-4 border-primary-500 text-left">
         {prompt}
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div className="flex flex-col gap-2 text-left">
         <label 
           htmlFor="fill-blank-input" 
-          style={{ 
-            ...figmaTokens.typography.styles.labelSmall, 
-            color: figmaTokens.colors.text.secondary 
-          }}
+          className="text-labelSmall text-text-secondary"
         >
           Type your answer:
         </label>
-        <input
+        <Input
           id="fill-blank-input"
           type="text"
           disabled={isSubmitted}
@@ -52,17 +39,6 @@ export function FillBlankExercise({
           onChange={handleInputChange}
           placeholder="Type the correct word..."
           autoComplete="off"
-          style={{
-            width: "100%",
-            padding: "16px 20px",
-            borderRadius: figmaTokens.radii.sm,
-            border: `2px solid ${figmaTokens.colors.primary[500]}`,
-            fontSize: 16,
-            fontFamily: figmaTokens.typography.families.body,
-            color: figmaTokens.colors.text.primary,
-            boxSizing: "border-box",
-            outline: "none",
-          }}
         />
       </div>
     </div>

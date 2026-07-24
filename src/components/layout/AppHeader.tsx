@@ -1,7 +1,6 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { CircleHelp, House, Settings, UserRound } from "lucide-react";
 import { GameNav } from "../exam/GameNav";
-import { figmaTokens } from "../../styles/tokens";
 
 type AppHeaderProps = {
   variant?: "default" | "exercise";
@@ -21,61 +20,18 @@ type HeaderIconButtonProps = {
 const brandIcon =
   "https://www.figma.com/api/mcp/asset/32f3c13c-20f1-4a46-896d-723960f56e2a";
 
-const topIconButtonStyle: CSSProperties = {
-  width: figmaTokens.layout.headerIconButtonSize,
-  height: figmaTokens.layout.headerIconButtonSize,
-  border: 0,
-  padding: figmaTokens.spacing[4],
-  borderRadius: figmaTokens.radii.sm,
-  background: "transparent",
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  color: figmaTokens.colors.text.primary,
-  cursor: "pointer",
-  transition: "background 0.2s ease",
-};
-
-const topIconStyle: CSSProperties = {
-  width: figmaTokens.layout.headerIconSize,
-  height: figmaTokens.layout.headerIconSize,
-  display: "block",
-};
-
-const navShellStyle: CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  background: figmaTokens.colors.surface.white,
-  boxSizing: "border-box",
-  zIndex: 100,
-};
-
 function HeaderIconButton({ label, children, onClick }: HeaderIconButtonProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-
   return (
     <button 
       type="button" 
       aria-label={label} 
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      style={{
-        ...topIconButtonStyle,
-        background: (isHovered || isFocused) ? figmaTokens.colors.background.app : "transparent",
-      }}
+      className="w-8 h-8 border-0 p-1 rounded-sm bg-transparent inline-flex items-center justify-center text-text-primary cursor-pointer transition-colors duration-200 ease-in-out hover:bg-background-app focus-visible:bg-background-app focus-visible:outline-none"
     >
       {children}
     </button>
   );
 }
-
-import { useState } from "react";
 
 function BrandMark({ onClick }: { onClick?: () => void }) {
   return (
@@ -83,32 +39,18 @@ function BrandMark({ onClick }: { onClick?: () => void }) {
       type="button"
       aria-label="LingoGuru"
       onClick={onClick}
-      style={{
-        border: 0,
-        background: "transparent",
-        padding: 0,
-        display: "inline-flex",
-        alignItems: "center",
-        gap: figmaTokens.layout.headerLogoGap,
-        cursor: onClick ? "pointer" : "default",
-      }}
+      className={`border-0 bg-transparent p-0 inline-flex items-center gap-2 ${onClick ? "cursor-pointer" : "cursor-default"}`}
     >
       <img
         src={brandIcon}
         alt=""
         width={36}
         height={36}
-        style={{ display: "block" }}
+        className="block"
         data-node-id="8:215"
         data-name="Icon"
       />
-      <span
-        style={{
-          ...figmaTokens.typography.styles.brand,
-          color: figmaTokens.colors.text.primary,
-          display: "inline-block",
-        }}
-      >
+      <span className="text-brand text-text-primary inline-block">
         LingoGuru
       </span>
     </button>
@@ -124,50 +66,37 @@ function DefaultHeaderBar({
 }) {
   return (
     <div
-      style={{
-        height: figmaTokens.layout.headerHeight,
-        padding: `${figmaTokens.layout.headerPaddingY}px ${figmaTokens.layout.headerPaddingX}px`,
-        borderBottom: `${figmaTokens.borderWidths.hairline}px solid ${figmaTokens.colors.border.default}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        boxSizing: "border-box",
-      }}
+      className="h-16 py-[13.5px] px-8 border-b border-border-default flex items-center justify-between box-border"
       data-node-id="8:213"
       data-name="Navigation"
     >
       <BrandMark onClick={onHomeClick} />
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: figmaTokens.layout.headerActionsGap,
-          width: 176,
-        }}
+        className="flex items-center gap-4 w-[176px]"
         data-node-id="12:2354"
         data-name="Container"
       >
         <HeaderIconButton label="Help" onClick={() => alert("LingoGuru Help: Choose correct grammar answers, complete listening and speaking tasks. Complete a levels to unlock more lessons!")}>
           <CircleHelp
             aria-hidden="true"
-            style={topIconStyle}
+            className="w-6 h-6 block"
             strokeWidth={1.75}
           />
         </HeaderIconButton>
         <HeaderIconButton label="Home" onClick={onHomeClick}>
-          <House aria-hidden="true" style={topIconStyle} strokeWidth={1.75} />
+          <House aria-hidden="true" className="w-6 h-6 block" strokeWidth={1.75} />
         </HeaderIconButton>
         <HeaderIconButton label="Settings" onClick={() => alert("LingoGuru Settings: Dark Mode and Audio volume are managed automatically.")}>
           <Settings
             aria-hidden="true"
-            style={topIconStyle}
+            className="w-6 h-6 block"
             strokeWidth={1.75}
           />
         </HeaderIconButton>
         <HeaderIconButton label="Profile" onClick={onProfileClick}>
           <UserRound
             aria-hidden="true"
-            style={topIconStyle}
+            className="w-6 h-6 block"
             strokeWidth={1.75}
           />
         </HeaderIconButton>
@@ -184,16 +113,18 @@ export function AppHeader({
   onHomeClick,
   onProfileClick,
 }: AppHeaderProps) {
+  const headerClass = "absolute top-0 left-0 right-0 bg-surface-white box-border z-[100]";
+
   if (variant === "exercise") {
     return (
-      <header style={navShellStyle} data-name="Navigation">
+      <header className={headerClass} data-name="Navigation">
         <GameNav progress={progress} counter={counter} onPause={onPause} />
       </header>
     );
   }
 
   return (
-    <header style={navShellStyle} data-name="Navigation">
+    <header className={headerClass} data-name="Navigation">
       <DefaultHeaderBar onHomeClick={onHomeClick} onProfileClick={onProfileClick} />
     </header>
   );
