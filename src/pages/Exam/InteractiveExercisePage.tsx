@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useExerciseSession, useUser, useProgress } from "../../context/LingoContext";
-import { EXERCISES_DATABASE } from "../../config/lessonsData";
+import { getLevelContent } from "../../config/lessonsData";
 import { CONFIG } from "../../config/constants";
 import { ChoiceExercise } from "../../components/exam/ChoiceExercise";
 import { FillBlankExercise } from "../../components/exam/FillBlankExercise";
@@ -48,12 +48,14 @@ export function InteractiveExercisePage({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
+  const levelContent = getLevelContent(skill, levelId);
+
   // Initialize quiz session
   useEffect(() => {
-    const exercises = EXERCISES_DATABASE[levelId] || [];
+    const exercises = levelContent?.exercises || [];
     startSession(levelId, exercises);
     return () => resetSession();
-  }, [levelId]);
+  }, [levelId, skill]);
 
   const currentQuestion = session.exercises[session.currentExerciseIndex];
 
@@ -122,7 +124,7 @@ export function InteractiveExercisePage({
   };
 
   const handleRepeatLevel = () => {
-    const exercises = EXERCISES_DATABASE[levelId] || [];
+    const exercises = levelContent?.exercises || [];
     startSession(levelId, exercises);
   };
 
@@ -141,7 +143,7 @@ export function InteractiveExercisePage({
 
   const allLevels = progress.flatMap((sp) => sp.units?.flatMap((u) => u.levels) || sp.levels || []);
   const currentLevel = allLevels.find((l) => l.id === levelId);
-  const levelTitle = currentLevel?.title || "Grammar Practice";
+  const levelTitle = levelContent?.lessonTopics[0]?.title || currentLevel?.title || "Practice";
 
   if (session.isFinished) {
     return (

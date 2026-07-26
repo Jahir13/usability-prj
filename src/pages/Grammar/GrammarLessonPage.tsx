@@ -5,7 +5,7 @@ import { ObjectivesChecklist } from "../../components/grammar/ObjectivesChecklis
 import { RuleCard } from "../../components/grammar/RuleCard";
 import { ExamplesCard } from "../../components/grammar/ExamplesCard";
 import { StartLevelButton } from "../../components/grammar/StartLevelButton";
-import { LESSONS_DATABASE } from "../../config/lessonsData";
+import { getLevelContent } from "../../config/lessonsData";
 import type { ActiveSkill } from "../../types";
 import { useProgress } from "../../context/LingoContext";
 
@@ -18,11 +18,12 @@ type GrammarLessonPageProps = {
 
 export function GrammarLessonPage({
   levelId,
+  skill,
   onStartLevel,
   onNavigate,
 }: GrammarLessonPageProps) {
   const { progress } = useProgress();
-  const topics = LESSONS_DATABASE[levelId] || [];
+  const topics = getLevelContent(skill, levelId)?.lessonTopics || [];
   
   const allLevels = progress.flatMap((sp) => sp.units?.flatMap((u) => u.levels) || sp.levels || []);
   const currentLevel = allLevels.find((l) => l.id === levelId);
@@ -30,8 +31,8 @@ export function GrammarLessonPage({
   const exercisesCount = currentLevel?.exercisesCount || 5;
   const minutesLabel = currentLevel?.minutesLabel || "~4 mins";
   
-  // Set the first topic matching the levelId as active, or default to the first one
-  const initialTopicId = topics.some(t => t.id === levelId) ? levelId : topics[0]?.id || "";
+  // Keep the current lesson focused on the selected level.
+  const initialTopicId = topics[0]?.id || "";
   const [activeTopicId, setActiveTopicId] = useState(initialTopicId);
   
   const topicData = topics.find((t) => t.id === activeTopicId) || topics[0];
