@@ -4,7 +4,6 @@ import { parseHash } from "./utils/router";
 import { WelcomePage, AuthFormPage } from "./pages/Auth/AuthPages";
 import { OnboardingModal } from "./pages/Auth/OnboardingModal";
 import { LearningPathPage } from "./pages/LearningPath/LearningPathPage";
-import { LevelIntroPage } from "./pages/Grammar/LevelIntroPage";
 import { GrammarLessonPage } from "./pages/Grammar/GrammarLessonPage";
 import { InteractiveExercisePage } from "./pages/Exam/InteractiveExercisePage";
 import { ProfilePage } from "./pages/Profile/ProfilePage";
@@ -130,7 +129,7 @@ function AppContent() {
             if (isLevelLocked(activeSkill, levelId)) {
               alert("This level is locked! Complete previous levels first.");
             } else {
-              navigate(`#/learn/${activeSkill}/${levelId}`);
+              navigate(`#/learn/${activeSkill}/${levelId}/lesson`);
             }
           }}
           onNavigate={(route) => navigate(route)}
@@ -146,11 +145,11 @@ function AppContent() {
         return null;
       }
       return (
-        <LevelIntroPage
+        <GrammarLessonPage
           levelId={levelId}
           skill={actSkill}
           onStartLevel={() => {
-            navigate(`#/learn/${skill}/${levelId}/lesson`);
+            navigate(`#/learn/${skill}/${levelId}/exercise`);
           }}
           onNavigate={(route) => navigate(route)}
         />
