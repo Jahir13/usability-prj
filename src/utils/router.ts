@@ -13,6 +13,7 @@ const patterns = [
   "#/learn/:skill/:levelId/lesson",
   "#/learn/:skill/:levelId",
   "#/profile",
+  "#/games/board",
 ];
 
 export function parseHash(hash: string): RouteMatch {

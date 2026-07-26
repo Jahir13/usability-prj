@@ -1,6 +1,6 @@
 export type LevelStatus = "done" | "current" | "locked";
 
-export type ActiveSkill = "grammar" | "speaking" | "listening" | "writing";
+export type ActiveSkill = "grammar" | "speaking" | "listening" | "writing" | "games";
 
 export interface UserProfile {
   id: string;

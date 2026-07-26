@@ -15,6 +15,7 @@ import { ArrowRight } from "lucide-react";
 import type { ActiveSkill } from "../../types";
 import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
+import { gradeExercise } from "../../utils/gradeExercise";
 
 type InteractiveExercisePageProps = {
   levelId: string;
@@ -74,20 +75,12 @@ export function InteractiveExercisePage({
   }
 
   const checkAnswer = () => {
-    let correct = false;
-    if (currentQuestion.type === "choice") {
-      correct = selectedOption === currentQuestion.correctAnswer;
-    } else if (currentQuestion.type === "input") {
-      correct = inputText.trim().toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
-    } else if (currentQuestion.type === "reorder") {
-      correct = reorderedWords.join(" ").toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
-    } else if (currentQuestion.type === "speaking") {
-      correct = recordingDone;
-    } else if (currentQuestion.type === "listening") {
-      const cleanInput = inputText.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-      const cleanCorrect = currentQuestion.correctAnswer.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-      correct = cleanInput === cleanCorrect;
-    }
+    const correct = gradeExercise(currentQuestion, {
+      selectedOption,
+      inputText,
+      reorderedWords,
+      recordingDone,
+    });
 
     setIsCorrect(correct);
     setIsSubmitted(true);

@@ -5,21 +5,16 @@ import {
 } from "../../components/learningpath/SkillTabSidebar";
 import { AccumulatedProgressBar } from "../../components/learningpath/AccumulatedProgressBar";
 import { ThematicUnit } from "../../components/learningpath/ThematicUnit";
+import { GamesLauncher } from "../../components/learningpath/GamesLauncher";
 import { useProgress } from "../../context/LingoContext";
 import type { LevelStatus } from "../../components/learningpath/LevelNode";
+import { skillMetaBySkill } from "../../config/skillMeta";
 
 type LearningPathPageProps = {
   activeSkill: ActiveSkill;
   onSkillChange: (skill: ActiveSkill) => void;
   onLevelClick: (levelId: string) => void;
   onNavigate: (route: string) => void;
-};
-
-const skillLabels: Record<ActiveSkill, { icon: string; label: string }> = {
-  grammar: { icon: "📖", label: "Grammar" },
-  speaking: { icon: "🎤", label: "Speaking" },
-  listening: { icon: "👂", label: "Listening" },
-  writing: { icon: "✍️", label: "Writing" },
 };
 
 export function LearningPathPage({ 
@@ -29,8 +24,10 @@ export function LearningPathPage({
   onNavigate,
 }: LearningPathPageProps) {
   const { progress } = useProgress();
-  const activeSkillMeta = skillLabels[activeSkill];
-  
+  const activeSkillMeta = skillMetaBySkill[activeSkill];
+  const ActiveSkillIcon = activeSkillMeta.icon;
+  const isGamesTab = activeSkill === "games";
+
   const skillProgress = progress.find((p) => p.skill === activeSkill);
   const units = skillProgress?.units || [];
   const progressPercent = skillProgress?.completedPercent ?? 0;
@@ -51,55 +48,61 @@ export function LearningPathPage({
         <main className="flex-1 min-w-0 max-w-[800px] box-border w-full flex flex-col items-center overflow-y-auto">
           <div className="w-full box-border p-4 md:p-8 flex flex-col">
             <div className="flex items-center gap-3 w-full box-border text-left">
-              <div className="w-10 h-10 rounded-full bg-background-subtle flex items-center justify-center shrink-0">
-                <span className="text-learningPathSkillEmoji text-text-primary">
-                  {activeSkillMeta.icon}
-                </span>
+              <div aria-hidden="true" className="w-10 h-10 rounded-full bg-background-subtle flex items-center justify-center shrink-0">
+                <ActiveSkillIcon width={20} height={20} strokeWidth={2} className="text-text-primary" />
               </div>
               <h1 className="text-learningPathTitle text-text-primary text-left m-0">
                 {activeSkillMeta.label}
               </h1>
             </div>
 
-            <div className="pt-6 box-border">
-              <AccumulatedProgressBar progress={progressPercent} />
-            </div>
-
-            <div className="pt-6 box-border text-left">
-              <div className="text-learningPathHeading text-text-secondary text-left">
-                Learning Path
+            {isGamesTab ? (
+              <div className="pt-6 box-border">
+                <GamesLauncher onNavigate={onNavigate} />
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="pt-6 box-border">
+                  <AccumulatedProgressBar progress={progressPercent} />
+                </div>
 
-            <div className="relative w-full pl-10 pt-5 box-border">
-              <div
-                aria-hidden="true"
-                className="absolute left-[23px] top-[44px] w-[2px] h-[458px] bg-background-muted z-0"
-                data-node-id="12:1709"
-                data-name="Container"
-              />
+                <div className="pt-6 box-border text-left">
+                  <div className="text-learningPathHeading text-text-secondary text-left">
+                    Learning Path
+                  </div>
+                </div>
 
-              <div className="relative z-10 flex flex-col gap-4 box-border">
-                {units.map((unit) => {
-                  const mappedLevels = unit.levels.map((level) => ({
-                    ...level,
-                    status: (level.status === "done" 
-                      ? "done" 
-                      : level.status === "current" 
-                        ? "in-progress" 
-                        : "blocked") as LevelStatus
-                  }));
-                  return (
-                    <ThematicUnit
-                      key={unit.title}
-                      title={unit.title}
-                      levels={mappedLevels}
-                      onLevelClick={onLevelClick}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+                <div className="relative w-full pl-10 pt-5 box-border">
+                  <div
+                    aria-hidden="true"
+                    className="absolute left-[23px] top-[44px] w-[2px] h-[458px] bg-background-muted z-0"
+                    data-node-id="12:1709"
+                    data-name="Container"
+                  />
+
+                  <div className="relative z-10 flex flex-col gap-4 box-border">
+                    {units.map((unit) => {
+                      const mappedLevels = unit.levels.map((level) => ({
+                        ...level,
+                        status: (level.status === "done"
+                          ? "done"
+                          : level.status === "current"
+                            ? "in-progress"
+                            : "blocked") as LevelStatus
+                      }));
+                      return (
+                        <ThematicUnit
+                          key={unit.title}
+                          title={unit.title}
+                          levels={mappedLevels}
+                          onLevelClick={onLevelClick}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
 
             <div className="pt-10 box-border">
               <div className="border-t border-border-default pt-6 flex justify-center items-center w-full box-border">

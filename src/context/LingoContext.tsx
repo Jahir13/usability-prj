@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
-import type { User, SkillProgress, LevelStatus, ActiveSkill } from "../types";
+import type { User, SkillProgress, LevelStatus, ActiveSkill, ThematicUnit } from "../types";
 
 // --- STORAGE CONSTANTS ---
 const STORAGE_VERSION = "v1";
@@ -44,7 +44,7 @@ const initialSkillUnits = (activeSkill: ActiveSkill, completedLevels: string[]):
   const isWritingL3Done = completedLevels.includes("writing-l3");
   const isWritingL4Done = completedLevels.includes("writing-l4");
 
-  let units = [];
+  let units: ThematicUnit[] = [];
 
   switch (activeSkill) {
     case "grammar":
