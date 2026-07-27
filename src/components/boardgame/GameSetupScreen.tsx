@@ -24,7 +24,7 @@ export function GameSetupScreen({
   const strings = useBoardGameStrings();
 
   return (
-    <Card className="max-w-[560px] w-full mx-auto my-10 p-8 flex flex-col gap-6 text-left" lang={strings.languageTag}>
+    <Card className="max-w-[560px] w-full mx-auto my-10 p-8 flex flex-col gap-6 text-left">
       <div className="flex items-center gap-3">
         <div aria-hidden="true" className="w-12 h-12 rounded-full bg-primary-soft flex items-center justify-center shrink-0">
           <Users width={24} height={24} strokeWidth={2} className="text-primary-500" />

@@ -54,7 +54,7 @@ export function BoardGamePage({ onNavigate }: BoardGamePageProps) {
     <div className="min-h-screen bg-background-app">
       <AppHeader onHomeClick={handleQuit} onProfileClick={() => onNavigate("#/profile")} />
 
-      <main className="pt-20 px-4 md:px-8 pb-10 box-border flex flex-col items-center" lang={strings.languageTag}>
+      <main className="pt-20 px-4 md:px-8 pb-10 box-border flex flex-col items-center">
         {state.phase === "setup" && (
           <GameSetupScreen
             playerCount={state.setupPlayerCount}
