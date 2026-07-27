@@ -81,3 +81,61 @@ LingoGuru is designed around Level AA WCAG accessibility compliance and European
 - **Semantic HTML**: Structural sections (`<header>`, `<main>`, `<section>`, `<aside>`) are declared correctly.
 - **Accessible Text**: Explicit labels and descriptors are attached to interactive graphics and utility buttons.
 - **Responsive Typography**: Uses fluid sizing relative to device viewport boundaries.
+
+---
+
+## ♻️ Iteration 3 — Corrections applied
+
+### 1. Keyboard and screen reader navigation
+- **Levels are real buttons.** `LevelNode` was a `<div onClick>`, so `Tab` skipped
+  every level and only reached the header and skill buttons. It is now a `<button>`
+  with an accessible name that includes the title, the number of lessons and the
+  status ("locked, finish the previous level to unlock it"). Locked levels stay in
+  the tab order with `aria-disabled` so they can still be discovered.
+- **Skills and lessons are ARIA tab lists** (`role="tablist"` + `role="tabpanel"`)
+  with a roving `tabindex`: the arrow keys move between Grammar/Speaking/Listening/
+  Writing (or between the 3 lessons of a level) and `Tab` moves FORWARD into the
+  content. Previously focus cycled inside the buttons and never reached the levels
+  or the lesson text.
+- **Explanatory text is reachable.** The new `ReadableRegion` component gives the
+  description, objectives, main rule, examples and the exercise guidance a
+  `role="group"`, an accessible name and one tab stop each, so a keyboard-only user
+  reads the lesson instead of jumping straight to the buttons.
+- **Skip links** on the learning path and the lesson page, visible on focus.
+- **No more `alert()` for locked content**: the reason is announced in a polite live
+  region (`role="status"`), which does not steal focus.
+- **Focus management**: the route change moves focus to `<main>` and updates the
+  document title; inside a practice session focus moves to the instruction of each
+  new exercise.
+- **Native form semantics**: multiple choice now uses real radio inputs inside a
+  `<fieldset>` with the sentence as `<legend>`, so position ("2 of 3") and state are
+  announced; unit titles are headings and level/lesson lists are real lists.
+
+### 2. First level of every skill unlocked
+Speaking, Listening and Writing had their level 1 gated behind the completion of
+Grammar level 1. Now the first level of each of the four skills is available on the
+first visit (`LingoContext.initialSkillUnits` and `data/defaultUserProgress.ts`).
+
+### 3. Unambiguous exercises
+Each exercise carries new fields (see `types/index.ts`):
+`hint` (a "HOW TO ANSWER" block, focusable and wired to the field with
+`aria-describedby`), `answerLabel`, `expectedFormat`, `placeholder`,
+`acceptedAnswers`, `strictFormat` and `explanation` (the feedback now says WHY the
+answer is correct). Typed exercises state exactly what to write ("write ONE word",
+"digits only", "the same sentence as the prompt"), and `utils/answers.ts` centralizes
+grading: case, punctuation and extra spaces are ignored, contractions are accepted,
+and only the punctuation lessons grade capital letters and periods (`strictFormat`).
+
+### 4. Three lessons per level in every skill
+All 19 levels now follow the structure of the old Grammar level 4: **3 sub-lessons
+with representative names** (for example "Third Person -s", "Negatives and
+Questions", "Commas in Lists") and **3-5 own exercises each** — 57 lessons and 205
+exercises in total. The XP of each level is split across its lessons, so the totals
+per level did not change. Content lives in `src/config/content/` (one module per
+skill) and `src/config/lessonsData.ts` only composes and queries it.
+
+### 5. Reorder exercises fixed
+Word selection is tracked by index instead of by text, so a sentence can repeat a
+word ("is", "the") without breaking, each word button says what it does
+("Add \"the\" to the sentence") and the sentence being built is announced in a live
+region.

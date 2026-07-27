@@ -45,7 +45,7 @@ export function createDefaultUserProgress(): UserProgress {
         completedPercent: 0,
         skill: "speaking",
         levels: [
-          { id: "speaking-l1", title: "Level 1 — Introduce Your Name", xpReward: 100, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
+          { id: "speaking-l1", title: "Level 1 — Introduce Your Name", xpReward: 100, status: "current", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
           { id: "speaking-l2", title: "Level 2 — Talk About Hobbies", xpReward: 150, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150 },
           { id: "speaking-l3", title: "Level 3 — Small Talk", xpReward: 200, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 200 },
           { id: "speaking-l4", title: "Level 4 — Ordering Food", xpReward: 250, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 250 }
@@ -55,7 +55,7 @@ export function createDefaultUserProgress(): UserProgress {
             id: "speaking-u1",
             title: "Introduce Yourself",
             levels: [
-              { id: "speaking-l1", title: "Level 1 — Introduce Your Name", xpReward: 100, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
+              { id: "speaking-l1", title: "Level 1 — Introduce Your Name", xpReward: 100, status: "current", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
               { id: "speaking-l2", title: "Level 2 — Talk About Hobbies", xpReward: 150, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150 }
             ]
           },
@@ -74,7 +74,7 @@ export function createDefaultUserProgress(): UserProgress {
         completedPercent: 0,
         skill: "listening",
         levels: [
-          { id: "listening-l1", title: "Level 1 — Numbers & Dates", xpReward: 100, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
+          { id: "listening-l1", title: "Level 1 — Numbers & Dates", xpReward: 100, status: "current", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
           { id: "listening-l2", title: "Level 2 — Asking Directions", xpReward: 150, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150 },
           { id: "listening-l3", title: "Level 3 — Movie Dialogues", xpReward: 200, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 200 },
           { id: "listening-l4", title: "Level 4 — News Broadcasts", xpReward: 250, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 250 }
@@ -84,7 +84,7 @@ export function createDefaultUserProgress(): UserProgress {
             id: "listening-u1",
             title: "Everyday Comprehension",
             levels: [
-              { id: "listening-l1", title: "Level 1 — Numbers & Dates", xpReward: 100, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
+              { id: "listening-l1", title: "Level 1 — Numbers & Dates", xpReward: 100, status: "current", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
               { id: "listening-l2", title: "Level 2 — Asking Directions", xpReward: 150, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150 }
             ]
           },
@@ -103,7 +103,7 @@ export function createDefaultUserProgress(): UserProgress {
         completedPercent: 0,
         skill: "writing",
         levels: [
-          { id: "writing-l1", title: "Level 1 — Punctuation Basics", xpReward: 100, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
+          { id: "writing-l1", title: "Level 1 — Punctuation Basics", xpReward: 100, status: "current", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
           { id: "writing-l2", title: "Level 2 — Writing Email Drafts", xpReward: 150, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150 },
           { id: "writing-l3", title: "Level 3 — Argumentative Paragraphs", xpReward: 200, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 200 },
           { id: "writing-l4", title: "Level 4 — Storytelling", xpReward: 250, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 250 }
@@ -113,7 +113,7 @@ export function createDefaultUserProgress(): UserProgress {
             id: "writing-u1",
             title: "Construct Basic Sentences",
             levels: [
-              { id: "writing-l1", title: "Level 1 — Punctuation Basics", xpReward: 100, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
+              { id: "writing-l1", title: "Level 1 — Punctuation Basics", xpReward: 100, status: "current", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100 },
               { id: "writing-l2", title: "Level 2 — Writing Email Drafts", xpReward: 150, status: "locked", exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150 }
             ]
           },

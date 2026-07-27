@@ -1,55 +1,73 @@
 type WritingExerciseProps = {
   options: string[];
-  selectedWords: string[];
+  /** Indices of `options` already placed in the answer, in order. */
+  selectedIndexes: number[];
   isSubmitted: boolean;
-  onSelectWord: (word: string) => void;
+  onToggleWord: (index: number) => void;
+  describedBy?: string;
 };
 
+/**
+ * Reorder exercise.
+ *
+ * Selection is tracked by index instead of by text, so a sentence can repeat a
+ * word ("is", "the") without breaking. Each button says what it does ("Add ...
+ * to the sentence" / "Remove ..."), and the sentence being built is announced
+ * through a polite live region.
+ */
 export function WritingExercise({
   options,
-  selectedWords,
+  selectedIndexes,
   isSubmitted,
-  onSelectWord,
+  onToggleWord,
+  describedBy,
 }: WritingExerciseProps) {
+  const builtSentence = selectedIndexes.map((index) => options[index]).join(" ");
+
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5" aria-describedby={describedBy}>
       {/* Answer box */}
-      <div 
+      <div
+        role="group"
+        aria-label="Your sentence"
         className="min-h-[56px] w-full border-[1.5px] border-dashed border-border-default bg-background-app rounded-sm py-3 px-4 box-border flex flex-wrap gap-2 items-center text-left"
-        aria-label="Your constructed sentence"
       >
-        {selectedWords.map((word) => (
+        {selectedIndexes.map((optionIndex, position) => (
           <button
-            key={word}
+            key={`${optionIndex}-${position}`}
             type="button"
             disabled={isSubmitted}
-            onClick={() => onSelectWord(word)}
+            onClick={() => onToggleWord(optionIndex)}
+            aria-label={`Remove "${options[optionIndex]}" from position ${position + 1} of your sentence`}
             className="px-3 py-1.5 bg-surface-white border-[1.5px] border-primary-500 rounded-sm text-bodySmall font-medium text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed"
           >
-            {word}
+            {options[optionIndex]}
           </button>
         ))}
-        {selectedWords.length === 0 && (
+        {selectedIndexes.length === 0 && (
           <span className="text-text-secondary text-sm">
-            Tap the words below to build your sentence...
+            Select the words below, in order, to build your sentence...
           </span>
         )}
       </div>
 
+      {/* Spoken feedback of the sentence built so far. */}
+      <p role="status" aria-live="polite" className="sr-only">
+        {builtSentence ? `Your sentence: ${builtSentence}` : "Your sentence is empty."}
+      </p>
+
       {/* Pool of words */}
-      <div 
-        className="flex flex-wrap gap-2 justify-center"
-        aria-label="Available words"
-      >
-        {options.map((word) => {
-          const isUsed = selectedWords.includes(word);
+      <div role="group" aria-label="Available words" className="flex flex-wrap gap-2 justify-center">
+        {options.map((word, index) => {
+          const isUsed = selectedIndexes.includes(index);
 
           return (
             <button
-              key={word}
+              key={`${word}-${index}`}
               type="button"
               disabled={isSubmitted || isUsed}
-              onClick={() => onSelectWord(word)}
+              onClick={() => onToggleWord(index)}
+              aria-label={`Add "${word}" to the sentence`}
               className={`px-[18px] py-2.5 rounded-sm text-bodySmall font-medium transition-all ${
                 isSubmitted || isUsed
                   ? "bg-background-muted text-text-secondary border-transparent opacity-50 cursor-not-allowed shadow-none"

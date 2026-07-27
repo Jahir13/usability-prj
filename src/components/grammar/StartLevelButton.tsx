@@ -3,6 +3,8 @@ type StartLevelButtonProps = {
   exercises: number;
   minutes: string;
   xp: string;
+  /** Name of the lesson, used to build a self-explanatory accessible name. */
+  lessonTitle?: string;
 };
 
 export function StartLevelButton({
@@ -10,13 +12,21 @@ export function StartLevelButton({
   exercises,
   minutes,
   xp,
+  lessonTitle,
 }: StartLevelButtonProps) {
+  const summary = `${exercises} exercises, ${minutes}, ${xp}`;
+
   return (
-    <div className="w-[379px] mx-auto box-border">
+    <div className="w-full max-w-[379px] mx-auto box-border">
       <button
         type="button"
         onClick={onStart}
-        className="w-full h-14 rounded-full border-0 bg-primary-500 shadow-primaryCta text-text-onPrimary cursor-pointer flex items-center justify-center box-border hover:opacity-90 transition-opacity"
+        aria-label={
+          lessonTitle
+            ? `Start the exercises of the lesson ${lessonTitle}. ${summary}`
+            : `Start the exercises. ${summary}`
+        }
+        className="w-full h-14 rounded-full border-0 bg-primary-500 shadow-primaryCta text-text-onPrimary cursor-pointer flex items-center justify-center box-border hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
         data-node-id="81:69"
         data-name="Button"
       >
@@ -24,47 +34,26 @@ export function StartLevelButton({
           className="text-label text-[17px] leading-[25.5px] text-text-onPrimary whitespace-nowrap"
           data-node-id="81:70"
         >
-          Start the level! →
+          Start the lesson! →
         </span>
       </button>
 
-      <div
-        className="w-full flex items-center justify-center gap-4 pt-4 box-border"
+      <p
+        className="w-full flex items-center justify-center gap-4 pt-4 box-border m-0"
         data-node-id="81:71"
       >
-        <span
-          className="text-labelSmall text-text-secondary whitespace-nowrap"
-          data-node-id="81:73"
-        >
+        <span className="text-labelSmall text-text-secondary whitespace-nowrap">
           {exercises} exercises
         </span>
-        <span
-          className="text-labelSmall text-border-default whitespace-nowrap"
-          data-node-id="81:75"
-          aria-hidden="true"
-        >
+        <span className="text-labelSmall text-border-default whitespace-nowrap" aria-hidden="true">
           ·
         </span>
-        <span
-          className="text-labelSmall text-text-secondary whitespace-nowrap"
-          data-node-id="81:77"
-        >
-          {minutes}
-        </span>
-        <span
-          className="text-labelSmall text-border-default whitespace-nowrap"
-          data-node-id="81:79"
-          aria-hidden="true"
-        >
+        <span className="text-labelSmall text-text-secondary whitespace-nowrap">{minutes}</span>
+        <span className="text-labelSmall text-border-default whitespace-nowrap" aria-hidden="true">
           ·
         </span>
-        <span
-          className="text-labelSmall text-success-500 whitespace-nowrap"
-          data-node-id="81:81"
-        >
-          {xp}
-        </span>
-      </div>
+        <span className="text-labelSmall text-success-500 whitespace-nowrap">{xp}</span>
+      </p>
     </div>
   );
 }

@@ -6,30 +6,52 @@ type ThematicUnitProps = {
     id: string;
     title: string;
     status: LevelStatus;
+    lessonsCount?: number;
   }>;
   onLevelClick?: (levelId: string) => void;
+  onBlockedLevelClick?: (title: string) => void;
 };
 
-export function ThematicUnit({ title, levels, onLevelClick }: ThematicUnitProps) {
+/**
+ * A thematic unit and its levels.
+ *
+ * The unit name is a real heading (h3 under the "Learning Path" h2) and the
+ * levels are a list, so screen reader users can jump between units and know
+ * how many levels each one contains.
+ */
+export function ThematicUnit({
+  title,
+  levels,
+  onLevelClick,
+  onBlockedLevelClick,
+}: ThematicUnitProps) {
+  const headingId = `unit-${title.replace(/\s+/g, "-").toLowerCase()}`;
+
   return (
-    <section className="relative w-full box-border">
-      <div className="inline-flex items-center h-[26px] rounded-full px-3 bg-surface-softAmber text-warning-500 box-border text-left">
+    <section className="relative w-full box-border" aria-labelledby={headingId}>
+      <h3
+        id={headingId}
+        className="inline-flex items-center h-[26px] rounded-full px-3 bg-surface-softAmber text-warning-500 box-border text-left m-0"
+      >
         <span className="text-learningPathUnitTag">
           Thematic Unit: {title}
         </span>
-      </div>
+      </h3>
 
-      <div className="flex flex-col gap-3 mt-4 box-border">
+      <ul className="flex flex-col gap-3 mt-4 box-border list-none p-0 m-0">
         {levels.map((level) => (
-          <LevelNode
-            key={level.id}
-            id={level.id}
-            title={level.title}
-            status={level.status}
-            onClick={() => onLevelClick?.(level.id)}
-          />
+          <li key={level.id} className="m-0 p-0">
+            <LevelNode
+              id={level.id}
+              title={level.title}
+              status={level.status}
+              lessonsCount={level.lessonsCount}
+              onClick={() => onLevelClick?.(level.id)}
+              onBlockedClick={onBlockedLevelClick}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

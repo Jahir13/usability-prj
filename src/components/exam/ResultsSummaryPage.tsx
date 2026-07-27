@@ -9,6 +9,7 @@ type ResultsSummaryPageProps = {
   levelTitle: string;
   onContinue: () => void;
   onRepeat: () => void;
+  continueLabel?: string;
 };
 
 export function ResultsSummaryPage({
@@ -18,6 +19,7 @@ export function ResultsSummaryPage({
   levelTitle,
   onContinue,
   onRepeat,
+  continueLabel = "Next Level",
 }: ResultsSummaryPageProps) {
   const isPerfect = score === total;
   const isGood = score >= Math.ceil(total * 0.6);
@@ -74,7 +76,7 @@ export function ResultsSummaryPage({
           size="lg"
           className="flex-[1.5] inline-flex items-center justify-center gap-2"
         >
-          Next Level
+          {continueLabel}
           <ArrowRight size={18} />
         </Button>
       </div>

@@ -153,13 +153,6 @@ export default {
           "0%": { transform: "translateY(8px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
-        diceRoll: {
-          "0%": { transform: "rotate(0deg) scale(1)" },
-          "25%": { transform: "rotate(-15deg) scale(1.05)" },
-          "50%": { transform: "rotate(10deg) scale(1.1)" },
-          "75%": { transform: "rotate(-8deg) scale(1.05)" },
-          "100%": { transform: "rotate(0deg) scale(1)" },
-        },
       },
       animation: {
         feedbackSlideIn: "feedbackSlideIn 0.3s ease-out",
@@ -168,7 +161,6 @@ export default {
         listeningBounce: "listeningBounce 1s infinite",
         speakingPulse: "speakingPulse 1.5s infinite",
         fadeInUp: "fadeInUp 0.3s ease",
-        diceRoll: "diceRoll 0.7s ease-in-out",
       },
     },
   },

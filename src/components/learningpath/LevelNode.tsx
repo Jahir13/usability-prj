@@ -9,7 +9,11 @@ type LevelNodeProps = {
   id?: string;
   status: LevelStatus;
   title: string;
+  /** Total number of lessons of the level, announced to screen readers. */
+  lessonsCount?: number;
   onClick?: () => void;
+  /** Called when a blocked level is activated, so the page can explain why. */
+  onBlockedClick?: (title: string) => void;
 };
 
 function extractLevelNumber(title: string) {
@@ -21,6 +25,13 @@ const statusLabelByStatus: Record<LevelStatus, string> = {
   done: "✓ Done",
   "in-progress": "In Progress",
   blocked: "Blocked",
+};
+
+/** Spoken version of the status, so the badge is not just a color/icon. */
+const statusSpokenByStatus: Record<LevelStatus, string> = {
+  done: "completed",
+  "in-progress": "available, in progress",
+  blocked: "locked, finish the previous level to unlock it",
 };
 
 const badgeVariants = cva(
@@ -60,19 +71,51 @@ const cardVariants = cva(
   }
 );
 
-export function LevelNode({ status, title, onClick }: LevelNodeProps) {
+/**
+ * One level of the learning path.
+ *
+ * It is a real <button>, so it is reachable with Tab and activated with Enter
+ * or Space. Blocked levels stay focusable (with aria-disabled) instead of being
+ * removed from the tab order: a screen reader user needs to know the level
+ * exists and why it cannot be opened yet.
+ */
+export function LevelNode({
+  status,
+  title,
+  lessonsCount,
+  onClick,
+  onBlockedClick,
+}: LevelNodeProps) {
   const [isHovered, setIsHovered] = useState(false);
   const isBlocked = status === "blocked";
   const circleNumber = extractLevelNumber(title);
 
+  const lessonsText = lessonsCount ? `, ${lessonsCount} lessons` : "";
+  const accessibleName = `${title}${lessonsText}. ${statusSpokenByStatus[status]}`;
+
+  const handleClick = () => {
+    if (isBlocked) {
+      onBlockedClick?.(title);
+      return;
+    }
+    onClick?.();
+  };
+
   return (
-    <div
-      onClick={!isBlocked ? onClick : undefined}
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-disabled={isBlocked || undefined}
+      aria-label={accessibleName}
       onMouseEnter={() => !isBlocked && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative w-full flex items-center gap-4 z-[5] ${isBlocked ? "cursor-not-allowed" : "cursor-pointer"}`}
+      onFocus={() => !isBlocked && setIsHovered(true)}
+      onBlur={() => setIsHovered(false)}
+      className={`relative w-full flex items-center gap-4 z-[5] bg-transparent border-0 p-0 text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 ${
+        isBlocked ? "cursor-not-allowed" : "cursor-pointer"
+      }`}
     >
-      <div className="relative w-2 h-12 shrink-0">
+      <span className="relative w-2 h-12 shrink-0 block">
         <StatusMarker
           status={status}
           size="lg"
@@ -82,22 +125,21 @@ export function LevelNode({ status, title, onClick }: LevelNodeProps) {
             "scale-100": !(isHovered && !isBlocked),
           })}
         />
-      </div>
+      </span>
 
-      <div className={cardVariants({ status, hovered: isHovered && !isBlocked })}>
-        <div className="py-[17px] px-[21px] flex items-center justify-between gap-3 box-border">
+      <span className={cardVariants({ status, hovered: isHovered && !isBlocked })}>
+        <span className="py-[17px] px-[21px] flex items-center justify-between gap-3 box-border">
           <span className="text-learningPathLevelTitle text-text-primary whitespace-nowrap overflow-hidden text-ellipsis">
             {title}
           </span>
 
-          <span className={badgeVariants({ status })}>
+          <span className={badgeVariants({ status })} aria-hidden="true">
             <span className="text-learningPathLevelStatus">
               {statusLabelByStatus[status]}
             </span>
           </span>
-        </div>
-      </div>
-    </div>
+        </span>
+      </span>
+    </button>
   );
 }
-

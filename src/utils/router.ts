@@ -9,11 +9,10 @@ const patterns = [
   "#/onboarding",
   "#/auth",
   "#/dashboard",
-  "#/learn/:skill/:levelId/exercise",
+  "#/learn/:skill/:levelId/:topicId/exercise",
   "#/learn/:skill/:levelId/lesson",
   "#/learn/:skill/:levelId",
   "#/profile",
-  "#/games/board",
 ];
 
 export function parseHash(hash: string): RouteMatch {

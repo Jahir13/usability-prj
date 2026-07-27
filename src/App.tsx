@@ -7,7 +7,6 @@ import { LearningPathPage } from "./pages/LearningPath/LearningPathPage";
 import { GrammarLessonPage } from "./pages/Grammar/GrammarLessonPage";
 import { InteractiveExercisePage } from "./pages/Exam/InteractiveExercisePage";
 import { ProfilePage } from "./pages/Profile/ProfilePage";
-import { BoardGamePage } from "./pages/Games/BoardGamePage";
 import { ErrorBoundary } from "./components/exam/ErrorBoundary";
 import type { ActiveSkill } from "./types";
 
@@ -34,6 +33,29 @@ function AppContent() {
 
   // Route parser
   const match = parseHash(hash);
+
+  /**
+   * On every route change, update the document title and move focus to the
+   * main region. Without this, a screen reader user who activates a level
+   * keeps the focus on the old page and never hears that the view changed.
+   * Pages that manage their own focus (the exercise screen) are unaffected,
+   * because focus() does nothing on an element that is not focusable.
+   */
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      "#/welcome": "Welcome",
+      "#/onboarding": "Getting started",
+      "#/auth": "Create your profile",
+      "#/dashboard": "Learning path",
+      "#/profile": "Your profile",
+    };
+    document.title = `${titles[match.pattern] || "Lesson"} · LingoGuru`;
+
+    const main = document.querySelector("main");
+    if (main instanceof HTMLElement) {
+      main.focus();
+    }
+  }, [hash, match.pattern]);
 
   // Check onboarding status
   const [isOnboardingDone, setIsOnboardingDone] = useState(() => {
@@ -127,9 +149,9 @@ function AppContent() {
           activeSkill={activeSkill}
           onSkillChange={setActiveSkill}
           onLevelClick={(levelId) => {
-            if (isLevelLocked(activeSkill, levelId)) {
-              alert("This level is locked! Complete previous levels first.");
-            } else {
+            // Locked levels are explained in the page's live region by
+            // LevelNode, so no disruptive browser alert is used here.
+            if (!isLevelLocked(activeSkill, levelId)) {
               navigate(`#/learn/${activeSkill}/${levelId}/lesson`);
             }
           }}
@@ -141,7 +163,6 @@ function AppContent() {
       const { skill, levelId } = match.params;
       const actSkill = skill as ActiveSkill;
       if (isLevelLocked(actSkill, levelId)) {
-        alert("This level is locked!");
         navigate("#/dashboard");
         return null;
       }
@@ -149,8 +170,8 @@ function AppContent() {
         <GrammarLessonPage
           levelId={levelId}
           skill={actSkill}
-          onStartLevel={() => {
-            navigate(`#/learn/${skill}/${levelId}/exercise`);
+          onStartLevel={(topicId) => {
+            navigate(`#/learn/${skill}/${levelId}/${topicId}/exercise`);
           }}
           onNavigate={(route) => navigate(route)}
         />
@@ -168,16 +189,16 @@ function AppContent() {
         <GrammarLessonPage
           levelId={levelId}
           skill={actSkill}
-          onStartLevel={() => {
-            navigate(`#/learn/${skill}/${levelId}/exercise`);
+          onStartLevel={(topicId) => {
+            navigate(`#/learn/${skill}/${levelId}/${topicId}/exercise`);
           }}
           onNavigate={(route) => navigate(route)}
         />
       );
     }
 
-    case "#/learn/:skill/:levelId/exercise": {
-      const { skill, levelId } = match.params;
+    case "#/learn/:skill/:levelId/:topicId/exercise": {
+      const { skill, levelId, topicId } = match.params;
       const actSkill = skill as ActiveSkill;
       if (isLevelLocked(actSkill, levelId)) {
         navigate("#/dashboard");
@@ -187,6 +208,7 @@ function AppContent() {
         <ErrorBoundary>
           <InteractiveExercisePage
             levelId={levelId}
+            topicId={topicId}
             skill={actSkill}
             onNavigate={(route) => navigate(route)}
           />
@@ -196,13 +218,6 @@ function AppContent() {
 
     case "#/profile":
       return <ProfilePage onNavigate={(route) => navigate(route)} />;
-
-    case "#/games/board":
-      return (
-        <ErrorBoundary>
-          <BoardGamePage onNavigate={(route) => navigate(route)} />
-        </ErrorBoundary>
-      );
 
     default:
       return <WelcomePage onStart={() => navigate("#/auth")} />;

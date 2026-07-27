@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
-import type { User, SkillProgress, LevelStatus, ActiveSkill, ThematicUnit } from "../types";
+import type { User, SkillProgress, LevelStatus, ActiveSkill } from "../types";
 
 // --- STORAGE CONSTANTS ---
 const STORAGE_VERSION = "v1";
@@ -20,6 +20,14 @@ const defaultUser: User = {
   },
 };
 
+/**
+ * Builds the units of one skill from the list of completed ids.
+ *
+ * Unlocking rule: the FIRST level of every skill (grammar, speaking, listening
+ * and writing) is always available from the very first visit, so a new learner
+ * can start with any skill. Inside a skill, each following level unlocks when
+ * the previous one is finished.
+ */
 const initialSkillUnits = (activeSkill: ActiveSkill, completedLevels: string[]): SkillProgress => {
   const isBasicGreetingsDone = completedLevels.includes("basic-greetings");
   const isSimplePresentDone = completedLevels.includes("simple-present");
@@ -44,7 +52,7 @@ const initialSkillUnits = (activeSkill: ActiveSkill, completedLevels: string[]):
   const isWritingL3Done = completedLevels.includes("writing-l3");
   const isWritingL4Done = completedLevels.includes("writing-l4");
 
-  let units: ThematicUnit[] = [];
+  let units = [];
 
   switch (activeSkill) {
     case "grammar":
@@ -76,7 +84,7 @@ const initialSkillUnits = (activeSkill: ActiveSkill, completedLevels: string[]):
           id: "speaking-u1",
           title: "Introduce Yourself",
           levels: [
-            { id: "speaking-l1", title: "Level 1 — Introduce Your Name", status: (isSpeakingL1Done ? "done" : isBasicGreetingsDone ? "current" : "locked") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100, xpReward: 100 },
+            { id: "speaking-l1", title: "Level 1 — Introduce Your Name", status: (isSpeakingL1Done ? "done" : "current") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100, xpReward: 100 },
             { id: "speaking-l2", title: "Level 2 — Talk About Hobbies", status: (isSpeakingL2Done ? "done" : isSpeakingL1Done ? "current" : "locked") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150, xpReward: 150 },
           ],
         },
@@ -96,7 +104,7 @@ const initialSkillUnits = (activeSkill: ActiveSkill, completedLevels: string[]):
           id: "listening-u1",
           title: "Everyday Comprehension",
           levels: [
-            { id: "listening-l1", title: "Level 1 — Numbers & Dates", status: (isListeningL1Done ? "done" : isBasicGreetingsDone ? "current" : "locked") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100, xpReward: 100 },
+            { id: "listening-l1", title: "Level 1 — Numbers & Dates", status: (isListeningL1Done ? "done" : "current") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100, xpReward: 100 },
             { id: "listening-l2", title: "Level 2 — Asking Directions", status: (isListeningL2Done ? "done" : isListeningL1Done ? "current" : "locked") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150, xpReward: 150 },
           ],
         },
@@ -116,7 +124,7 @@ const initialSkillUnits = (activeSkill: ActiveSkill, completedLevels: string[]):
           id: "writing-u1",
           title: "Construct Basic Sentences",
           levels: [
-            { id: "writing-l1", title: "Level 1 — Punctuation Basics", status: (isWritingL1Done ? "done" : isBasicGreetingsDone ? "current" : "locked") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100, xpReward: 100 },
+            { id: "writing-l1", title: "Level 1 — Punctuation Basics", status: (isWritingL1Done ? "done" : "current") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 100, xpReward: 100 },
             { id: "writing-l2", title: "Level 2 — Writing Email Drafts", status: (isWritingL2Done ? "done" : isWritingL1Done ? "current" : "locked") as LevelStatus, exercisesCount: 5, minutesLabel: "~4 mins", xpValue: 150, xpReward: 150 },
           ],
         },
@@ -269,7 +277,11 @@ function progressReducer(state: SkillProgress[], action: ProgressAction): SkillP
 
 interface ProgressContextType {
   progress: SkillProgress[];
+  /** Ids of every completed level AND every completed sub-lesson (topic). */
+  completedIds: string[];
   completeLevel: (skill: ActiveSkill, levelId: string) => void;
+  /** Marks a single sub-lesson (topic) as done without changing the parent level's status. */
+  completeTopic: (topicId: string) => void;
 }
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
@@ -432,9 +444,13 @@ export function LingoProviders({ children }: { children: React.ReactNode }) {
 
   const progressActions: ProgressContextType = {
     progress,
+    completedIds: completedLevelIds,
     completeLevel: (skill, levelId) => {
       setCompletedLevelIds({ type: "ADD", payload: levelId });
       progressDispatch({ type: "COMPLETE_LEVEL", payload: { skill, levelId } });
+    },
+    completeTopic: (topicId) => {
+      setCompletedLevelIds({ type: "ADD", payload: topicId });
     },
   };
 
