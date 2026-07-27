@@ -1,8 +1,14 @@
 import { BookOpen, Mic, Ear, PenLine, Gamepad2, type LucideIcon } from "lucide-react";
 import type { ActiveSkill } from "../types";
 
+// "games" is a navigation entry (board game mode), not a learning skill with
+// its own progress/level content, so it is added only here instead of
+// widening the shared ActiveSkill type used to index UserProgress.skills and
+// the learning-path content lookups.
+export type SkillMetaSkill = ActiveSkill | "games";
+
 export interface SkillMeta {
-  skill: ActiveSkill;
+  skill: SkillMetaSkill;
   icon: LucideIcon;
   label: string;
 }
@@ -25,7 +31,7 @@ export const skillMetaBySkill = skillMetaList.reduce(
     acc[meta.skill] = meta;
     return acc;
   },
-  {} as Record<ActiveSkill, SkillMeta>
+  {} as Record<SkillMetaSkill, SkillMeta>
 );
 
 export const GamesIcon: LucideIcon = Gamepad2;

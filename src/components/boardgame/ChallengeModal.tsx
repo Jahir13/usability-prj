@@ -27,7 +27,9 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [inputText, setInputText] = useState("");
-  const [reorderedWords, setReorderedWords] = useState<string[]>([]);
+  // Tracked by index (not by word) so a sentence can repeat a word ("is",
+  // "the") without breaking, matching WritingExercise's own answer model.
+  const [selectedWordIndexes, setSelectedWordIndexes] = useState<number[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -38,6 +40,7 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
   // component's local answer state always starts clean already.
   const handleSubmit = () => {
     if (!challenge) return;
+    const reorderedWords = selectedWordIndexes.map((index) => challenge.exercise.options?.[index] ?? "");
     const correct = gradeExercise(challenge.exercise, { selectedOption, inputText, reorderedWords, recordingDone: false });
     setIsCorrect(correct);
     setIsSubmitted(true);
@@ -102,10 +105,12 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
   const isAnswerMissing =
     (exercise.type === "choice" && !selectedOption) ||
     (exercise.type === "input" && !inputText) ||
-    (exercise.type === "reorder" && reorderedWords.length === 0);
+    (exercise.type === "reorder" && selectedWordIndexes.length === 0);
 
-  const handleWordSelect = (word: string) => {
-    setReorderedWords((prev) => (prev.includes(word) ? prev.filter((w) => w !== word) : [...prev, word]));
+  const handleWordToggle = (index: number) => {
+    setSelectedWordIndexes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
   };
 
   return (
@@ -132,6 +137,7 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
         <div>
           {exercise.type === "choice" && exercise.options && (
             <ChoiceExercise
+              name={`challenge-${exercise.id}`}
               prompt={exercise.prompt}
               options={exercise.options}
               selectedOption={selectedOption}
@@ -150,9 +156,9 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
           {exercise.type === "reorder" && exercise.options && (
             <WritingExercise
               options={exercise.options}
-              selectedWords={reorderedWords}
+              selectedIndexes={selectedWordIndexes}
               isSubmitted={isSubmitted}
-              onSelectWord={handleWordSelect}
+              onToggleWord={handleWordToggle}
             />
           )}
 
