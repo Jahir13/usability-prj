@@ -126,16 +126,10 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
           >
             {strings.challengeHeading(currentPlayerName)}
           </h3>
-          <p className="text-bodySmall text-text-tertiary m-0" lang="en">
-            {exercise.instruction}
-          </p>
+          <p className="text-bodySmall text-text-tertiary m-0">{exercise.instruction}</p>
         </div>
 
-        {/* The exercise itself is always in English (the language being
-            learned) even when the rest of this dialog is shown in the
-            player's native language — marked explicitly so screen readers
-            switch pronunciation for this passage (WCAG 3.1.2). */}
-        <div lang="en">
+        <div>
           {exercise.type === "choice" && exercise.options && (
             <ChoiceExercise
               prompt={exercise.prompt}

@@ -11,7 +11,7 @@ export function GamesLauncher({ onNavigate }: GamesLauncherProps) {
   const strings = useBoardGameStrings();
 
   return (
-    <Card className="w-full p-8 flex flex-col items-start gap-4 text-left" lang={strings.languageTag}>
+    <Card className="w-full p-8 flex flex-col items-start gap-4 text-left">
       <div aria-hidden="true" className="w-14 h-14 rounded-full bg-primary-soft flex items-center justify-center">
         <Gamepad2 width={28} height={28} strokeWidth={2} className="text-primary-500" />
       </div>
