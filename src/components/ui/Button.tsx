@@ -28,7 +28,7 @@ export function Button({
           {
             "bg-primary-500 text-text-onPrimary shadow-primaryCta hover:scale-[1.02] active:scale-95 hover:shadow-[0_6px_20px_rgba(79,110,247,0.4)] focus-visible:ring-primary-500":
               variant === "primary",
-            "bg-surface-white border border-border-default text-text-secondary hover:bg-background-app active:scale-95 focus-visible:ring-border-default":
+            "bg-surface-white border border-border-default text-text-tertiary hover:bg-background-app active:scale-95 focus-visible:ring-border-default":
               variant === "secondary",
             "bg-surface-white border border-primary-500 text-primary-500 hover:bg-primary-soft active:scale-95 focus-visible:ring-primary-500":
               variant === "outline-primary",

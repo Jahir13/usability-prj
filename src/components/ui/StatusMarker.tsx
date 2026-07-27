@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Check, Lock } from "lucide-react";
 
 export type StatusMarkerStatus = "done" | "in-progress" | "blocked";
 
@@ -18,18 +19,25 @@ export function StatusMarker({
 }: StatusMarkerProps) {
   const isDone = status === "done";
   const isBlocked = status === "blocked";
+  const iconSize = size === "lg" ? 20 : 12;
 
-  // Content fallbacks matching design markers
-  const displayContent = content !== undefined 
-    ? content 
-    : isDone 
-      ? "✓" 
-      : isBlocked 
-        ? "🔒" 
-        : "?";
+  // Real SVG icons instead of emoji glyphs, so the marker renders the same
+  // way everywhere. It's always paired with a visible text status label at
+  // the call site, so this marker itself is decorative (aria-hidden below).
+  const displayContent =
+    content !== undefined ? (
+      content
+    ) : isDone ? (
+      <Check width={iconSize} height={iconSize} strokeWidth={3} />
+    ) : isBlocked ? (
+      <Lock width={iconSize} height={iconSize} strokeWidth={2.5} />
+    ) : (
+      "?"
+    );
 
   return (
     <div
+      aria-hidden="true"
       className={twMerge(
         clsx(
           "rounded-full flex items-center justify-center shrink-0 box-border transition-all duration-200 ease-in-out",

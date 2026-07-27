@@ -661,6 +661,10 @@ export const CONTENT_DATABASE: ContentDatabase = {
       ],
     },
   },
+  // Intentionally empty: the board game (see BoardGamePage) doesn't use the
+  // per-level lesson/exercise system — it samples challenges directly from
+  // EXERCISES_DATABASE.
+  games: {},
 };
 
 function buildLessonDatabase(database: Record<ActiveSkill, Record<string, LevelContent>>) {

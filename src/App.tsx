@@ -7,6 +7,7 @@ import { LearningPathPage } from "./pages/LearningPath/LearningPathPage";
 import { GrammarLessonPage } from "./pages/Grammar/GrammarLessonPage";
 import { InteractiveExercisePage } from "./pages/Exam/InteractiveExercisePage";
 import { ProfilePage } from "./pages/Profile/ProfilePage";
+import { BoardGamePage } from "./pages/Games/BoardGamePage";
 import { ErrorBoundary } from "./components/exam/ErrorBoundary";
 import type { ActiveSkill } from "./types";
 
@@ -195,6 +196,13 @@ function AppContent() {
 
     case "#/profile":
       return <ProfilePage onNavigate={(route) => navigate(route)} />;
+
+    case "#/games/board":
+      return (
+        <ErrorBoundary>
+          <BoardGamePage onNavigate={(route) => navigate(route)} />
+        </ErrorBoundary>
+      );
 
     default:
       return <WelcomePage onStart={() => navigate("#/auth")} />;
