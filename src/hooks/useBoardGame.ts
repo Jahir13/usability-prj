@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer } from "react";
 import type { BoardGameAction, BoardGameState, BoardPlayer, PlayerCount } from "../types/boardGame";
-import { BOARD_LENGTH, CHALLENGE_BONUS_SQUARES, pickRandomChallengeExercise } from "../config/boardGameConfig";
+import { BOARD_LENGTH, pickRandomChallengeExercise } from "../config/boardGameConfig";
 
 declare global {
   interface Window {
@@ -21,9 +21,10 @@ function prefersReducedMotion(): boolean {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// The sequence of squares a token visibly hops through for a given move,
-// in order (excludes the starting square, includes the final one). A move
-// that would overshoot the finish walks up to it and back down instead.
+// The sequence of squares a token visibly hops through for a correct
+// answer's move, in order (excludes the starting square, includes the
+// final one). A move that would overshoot the finish walks up to it and
+// back down instead.
 function computeStepPath(fromPosition: number, distance: number): number[] {
   const finishIndex = BOARD_LENGTH - 1;
   const target = fromPosition + distance;
@@ -41,10 +42,11 @@ function computeStepPath(fromPosition: number, distance: number): number[] {
 
 const STEP_DELAY_MS = 480;
 const ROLL_SHUFFLE_MS = 700;
+// Pause after the dice value settles, before the challenge opens, so the
+// rolled number has a moment to register before it's replaced by the modal.
 const ROLL_RESULT_PAUSE_MS = 500;
 // Pause after the token visibly lands on its final square, before the
-// challenge modal (or the win/turn-pass state) appears — so arrival always
-// reads as a distinct beat, not something that happens mid-hop.
+// win/turn-pass state applies — so arrival always reads as a distinct beat.
 const LANDING_PAUSE_MS = 550;
 
 const initialState: BoardGameState = {
@@ -99,34 +101,14 @@ function boardGameReducer(state: BoardGameState, action: BoardGameAction): Board
     case "BEGIN_ROLL":
       return { ...state, dice: { ...state.dice, isRolling: true }, turnLocked: true };
 
+    // Rolling only proposes a move: the dice value is shown, and a
+    // challenge always follows — nothing moves until it's answered.
     case "DICE_SETTLED":
-      return { ...state, dice: { value: action.payload.value, isRolling: false }, isMoving: true };
-
-    case "STEP_TOKEN": {
-      const players = state.players.map((p, i) =>
-        i === state.currentPlayerIndex ? { ...p, position: action.payload.square } : p
-      );
-      return { ...state, players };
-    }
-
-    case "FINISH_MOVE": {
-      const currentPlayer = state.players[state.currentPlayerIndex];
-      const { value, bounced } = action.payload;
-      const isWin = currentPlayer.position === BOARD_LENGTH - 1;
-
       return {
         ...state,
-        isMoving: false,
-        awaitingChallenge: !isWin,
-        phase: isWin ? "finished" : state.phase,
-        winnerId: isWin ? currentPlayer.id : state.winnerId,
-        announcement: isWin
-          ? { key: "wonExact", name: currentPlayer.name, value }
-          : bounced
-            ? { key: "bounced", name: currentPlayer.name, value, square: currentPlayer.position }
-            : { key: "moved", name: currentPlayer.name, value, square: currentPlayer.position },
+        dice: { value: action.payload.value, isRolling: false },
+        awaitingChallenge: true,
       };
-    }
 
     case "OPEN_CHALLENGE": {
       const currentPlayer = state.players[state.currentPlayerIndex];
@@ -141,32 +123,47 @@ function boardGameReducer(state: BoardGameState, action: BoardGameAction): Board
     case "CLOSE_CHALLENGE_MODAL":
       return { ...state, activeChallenge: null };
 
+    case "STEP_TOKEN": {
+      const players = state.players.map((p, i) =>
+        i === state.currentPlayerIndex ? { ...p, position: action.payload.square } : p
+      );
+      return { ...state, players };
+    }
+
     case "BEGIN_CHALLENGE_MOVE":
       return { ...state, isMoving: true };
 
-    case "RESOLVE_CHALLENGE": {
+    case "CORRECT_ADVANCE": {
       const currentPlayer = state.players[state.currentPlayerIndex];
-      const { isCorrect } = action.payload;
-
-      if (!isCorrect) {
-        return {
-          ...state,
-          isMoving: false,
-          awaitingChallenge: false,
-          announcement: { key: "challengeIncorrect", name: currentPlayer.name },
-        };
-      }
-
+      const { value, bounced } = action.payload;
       const isWin = currentPlayer.position === BOARD_LENGTH - 1;
+
       return {
         ...state,
         isMoving: false,
-        awaitingChallenge: !isWin,
         phase: isWin ? "finished" : state.phase,
         winnerId: isWin ? currentPlayer.id : state.winnerId,
-        announcement: isWin
-          ? { key: "challengeCorrectWin", name: currentPlayer.name, bonus: CHALLENGE_BONUS_SQUARES }
-          : { key: "challengeCorrectMoved", name: currentPlayer.name, bonus: CHALLENGE_BONUS_SQUARES, square: currentPlayer.position },
+        announcement: {
+          key: "correctAdvance",
+          name: currentPlayer.name,
+          value,
+          square: currentPlayer.position,
+          bounced,
+          won: isWin,
+        },
+      };
+    }
+
+    case "INCORRECT_STAY": {
+      const currentPlayer = state.players[state.currentPlayerIndex];
+      return {
+        ...state,
+        announcement: {
+          key: "incorrectStay",
+          name: currentPlayer.name,
+          value: action.payload.value,
+          square: currentPlayer.position,
+        },
       };
     }
 
@@ -213,17 +210,22 @@ function boardGameReducer(state: BoardGameState, action: BoardGameAction): Board
 export function useBoardGame() {
   const [state, dispatch] = useReducer(boardGameReducer, initialState);
 
-  // Once a roll lands on a challenge square, sample a question and open it.
+  // Once a roll settles, sample a question and open it after a short pause
+  // (so the rolled number has a moment to register first).
   useEffect(() => {
     if (state.phase !== "playing") return;
     if (!state.awaitingChallenge || state.activeChallenge) return;
 
-    const exercise = pickRandomChallengeExercise(state.usedExerciseIds);
-    dispatch({ type: "OPEN_CHALLENGE", payload: { exercise } });
+    const delay = prefersReducedMotion() ? 0 : ROLL_RESULT_PAUSE_MS;
+    const timeoutId = window.setTimeout(() => {
+      const exercise = pickRandomChallengeExercise(state.usedExerciseIds);
+      dispatch({ type: "OPEN_CHALLENGE", payload: { exercise } });
+    }, delay);
+    return () => window.clearTimeout(timeoutId);
   }, [state.phase, state.awaitingChallenge, state.activeChallenge, state.usedExerciseIds]);
 
-  // After a resolved move that isn't a pending challenge or a win, pass the
-  // turn along automatically once the announcement has had a moment to show.
+  // After a resolved answer that isn't a pending challenge, pass the turn
+  // along automatically once the announcement has had a moment to show.
   // Gated on isMoving too, so the turn never passes while a token is still
   // mid-hop across the board.
   useEffect(() => {
@@ -240,7 +242,6 @@ export function useBoardGame() {
 
   const rollDice = useCallback(() => {
     if (state.turnLocked || state.phase !== "playing") return;
-    const startingPlayer = state.players[state.currentPlayerIndex];
     dispatch({ type: "BEGIN_ROLL" });
 
     const reduced = prefersReducedMotion();
@@ -249,33 +250,8 @@ export function useBoardGame() {
     window.setTimeout(() => {
       const value = consumeTestDiceValue() ?? 1 + Math.floor(Math.random() * 6);
       dispatch({ type: "DICE_SETTLED", payload: { value } });
-
-      const path = computeStepPath(startingPlayer.position, value);
-      const bounced = startingPlayer.position + value > BOARD_LENGTH - 1;
-      const resultPauseMs = reduced ? 0 : ROLL_RESULT_PAUSE_MS;
-
-      window.setTimeout(() => {
-        if (reduced || path.length === 0) {
-          const finalSquare = path[path.length - 1] ?? startingPlayer.position;
-          dispatch({ type: "STEP_TOKEN", payload: { square: finalSquare } });
-          dispatch({ type: "FINISH_MOVE", payload: { value, bounced } });
-          return;
-        }
-
-        path.forEach((square, i) => {
-          window.setTimeout(() => {
-            dispatch({ type: "STEP_TOKEN", payload: { square } });
-          }, i * STEP_DELAY_MS);
-        });
-        window.setTimeout(
-          () => {
-            dispatch({ type: "FINISH_MOVE", payload: { value, bounced } });
-          },
-          (path.length - 1) * STEP_DELAY_MS + LANDING_PAUSE_MS
-        );
-      }, resultPauseMs);
     }, shuffleDurationMs);
-  }, [state.turnLocked, state.phase, state.players, state.currentPlayerIndex]);
+  }, [state.turnLocked, state.phase]);
 
   const setPlayerCount = useCallback((count: PlayerCount) => {
     dispatch({ type: "SET_PLAYER_COUNT", payload: count });
@@ -289,24 +265,28 @@ export function useBoardGame() {
     dispatch({ type: "CONFIRM_SETUP", payload: { defaultNames } });
   }, []);
 
+  // No skip: an incorrect answer simply means no movement — the player
+  // stays exactly where they already were.
   const resolveChallenge = useCallback(
     (isCorrect: boolean) => {
       dispatch({ type: "CLOSE_CHALLENGE_MODAL" });
+      const value = state.dice.value ?? 0;
 
       if (!isCorrect) {
-        dispatch({ type: "RESOLVE_CHALLENGE", payload: { isCorrect: false } });
+        dispatch({ type: "INCORRECT_STAY", payload: { value } });
         return;
       }
 
       dispatch({ type: "BEGIN_CHALLENGE_MOVE" });
       const currentPlayer = state.players[state.currentPlayerIndex];
-      const path = computeStepPath(currentPlayer.position, CHALLENGE_BONUS_SQUARES);
+      const path = computeStepPath(currentPlayer.position, value);
+      const bounced = currentPlayer.position + value > BOARD_LENGTH - 1;
       const reduced = prefersReducedMotion();
 
       if (reduced || path.length === 0) {
         const finalSquare = path[path.length - 1] ?? currentPlayer.position;
         dispatch({ type: "STEP_TOKEN", payload: { square: finalSquare } });
-        dispatch({ type: "RESOLVE_CHALLENGE", payload: { isCorrect: true } });
+        dispatch({ type: "CORRECT_ADVANCE", payload: { value, bounced } });
         return;
       }
 
@@ -317,12 +297,12 @@ export function useBoardGame() {
       });
       window.setTimeout(
         () => {
-          dispatch({ type: "RESOLVE_CHALLENGE", payload: { isCorrect: true } });
+          dispatch({ type: "CORRECT_ADVANCE", payload: { value, bounced } });
         },
         (path.length - 1) * STEP_DELAY_MS + LANDING_PAUSE_MS
       );
     },
-    [state.players, state.currentPlayerIndex]
+    [state.players, state.currentPlayerIndex, state.dice.value]
   );
 
   const playAgain = useCallback(() => dispatch({ type: "PLAY_AGAIN" }), []);

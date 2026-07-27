@@ -51,7 +51,6 @@ export interface BoardGameStrings {
   playersListLabel: string;
   boardLabel: string;
   challengeHeading: (name: string) => string;
-  challengeSkip: string;
   challengeSubmit: string;
   challengeContinue: string;
   winnerHeading: (name: string) => string;
@@ -64,7 +63,7 @@ export interface BoardGameStrings {
 const english: BoardGameStrings = {
   launcherTitle: "Board Race",
   launcherDescription:
-    "A pass-and-play board game for 2–5 players. Roll the dice, answer a challenge on every square, and be the first to land exactly on the finish.",
+    "A pass-and-play board game for 2–5 players. Roll the dice, answer the question — get it right and you advance, get it wrong and you stay put.",
   launcherPlayButton: "Play the board game",
   launcherComingSoon: "More games coming soon.",
   setupSubtitle: "Pass the device around — first to land exactly on the finish wins.",
@@ -84,7 +83,6 @@ const english: BoardGameStrings = {
   playersListLabel: "Players",
   boardLabel: "Board game track",
   challengeHeading: (name) => `${name}'s challenge`,
-  challengeSkip: "Skip (no bonus)",
   challengeSubmit: "Submit answer",
   challengeContinue: "Continue",
   winnerHeading: (name) => `${name} wins!`,
@@ -95,18 +93,12 @@ const english: BoardGameStrings = {
     switch (a.key) {
       case "turnStart":
         return `${a.name}'s turn. Roll the dice!`;
-      case "moved":
-        return `${a.name} rolled a ${a.value} and moved to square ${a.square} — a challenge!`;
-      case "bounced":
-        return `${a.name} rolled a ${a.value}, overshot the finish, and bounced back to square ${a.square} — a challenge!`;
-      case "wonExact":
-        return `${a.name} rolled a ${a.value} and landed exactly on the finish — ${a.name} wins!`;
-      case "challengeCorrectMoved":
-        return `${a.name} answered correctly and moved ${a.bonus} extra squares to square ${a.square} — another challenge!`;
-      case "challengeCorrectWin":
-        return `${a.name} answered correctly, moved ${a.bonus} extra squares, and landed exactly on the finish — ${a.name} wins!`;
-      case "challengeIncorrect":
-        return `${a.name} didn't get it this time — no bonus, but keep going!`;
+      case "correctAdvance":
+        if (a.won) return `${a.name} rolled a ${a.value}, answered correctly, and landed exactly on the finish — ${a.name} wins!`;
+        if (a.bounced) return `${a.name} rolled a ${a.value}, answered correctly, overshot the finish, and bounced back to square ${a.square}.`;
+        return `${a.name} rolled a ${a.value}, answered correctly, and advanced to square ${a.square}.`;
+      case "incorrectStay":
+        return `${a.name} rolled a ${a.value} but didn't answer correctly — stays on square ${a.square}.`;
     }
   },
 };
@@ -114,7 +106,7 @@ const english: BoardGameStrings = {
 const spanish: BoardGameStrings = {
   launcherTitle: "Carrera de Tablero",
   launcherDescription:
-    "Un juego de mesa para pasar el dispositivo entre 2 y 5 jugadores. Tira el dado, responde un reto en cada casilla y sé el primero en caer justo en la meta.",
+    "Un juego de mesa para pasar el dispositivo entre 2 y 5 jugadores. Tira el dado y responde la pregunta — si aciertas avanzas, si fallas te quedas donde estabas.",
   launcherPlayButton: "Jugar al juego de mesa",
   launcherComingSoon: "Pronto habrá más juegos.",
   setupSubtitle: "Pasen el dispositivo por turnos — el primero en caer justo en la meta gana.",
@@ -134,7 +126,6 @@ const spanish: BoardGameStrings = {
   playersListLabel: "Jugadores",
   boardLabel: "Tablero del juego",
   challengeHeading: (name) => `Reto de ${name}`,
-  challengeSkip: "Saltar (sin bono)",
   challengeSubmit: "Enviar respuesta",
   challengeContinue: "Continuar",
   winnerHeading: (name) => `¡${name} gana!`,
@@ -145,18 +136,12 @@ const spanish: BoardGameStrings = {
     switch (a.key) {
       case "turnStart":
         return `Turno de ${a.name}. ¡Tira el dado!`;
-      case "moved":
-        return `${a.name} sacó un ${a.value} y avanzó a la casilla ${a.square} — ¡un reto!`;
-      case "bounced":
-        return `${a.name} sacó un ${a.value}, se pasó de la meta y rebotó a la casilla ${a.square} — ¡un reto!`;
-      case "wonExact":
-        return `${a.name} sacó un ${a.value} y cayó justo en la meta — ¡${a.name} gana!`;
-      case "challengeCorrectMoved":
-        return `${a.name} respondió bien y avanzó ${a.bonus} casillas extra hasta la casilla ${a.square} — ¡otro reto!`;
-      case "challengeCorrectWin":
-        return `${a.name} respondió bien, avanzó ${a.bonus} casillas extra y cayó justo en la meta — ¡${a.name} gana!`;
-      case "challengeIncorrect":
-        return `${a.name} no acertó esta vez — sin bono, pero sigue adelante.`;
+      case "correctAdvance":
+        if (a.won) return `${a.name} sacó un ${a.value}, respondió bien y cayó justo en la meta — ¡${a.name} gana!`;
+        if (a.bounced) return `${a.name} sacó un ${a.value}, respondió bien, se pasó de la meta y rebotó a la casilla ${a.square}.`;
+        return `${a.name} sacó un ${a.value}, respondió bien y avanzó a la casilla ${a.square}.`;
+      case "incorrectStay":
+        return `${a.name} sacó un ${a.value} pero no respondió bien — se queda en la casilla ${a.square}.`;
     }
   },
 };
@@ -164,7 +149,7 @@ const spanish: BoardGameStrings = {
 const portuguese: BoardGameStrings = {
   launcherTitle: "Corrida no Tabuleiro",
   launcherDescription:
-    "Um jogo de tabuleiro para passar o dispositivo entre 2 e 5 jogadores. Jogue o dado, responda a um desafio em cada casa e seja o primeiro a cair exatamente na chegada.",
+    "Um jogo de tabuleiro para passar o dispositivo entre 2 e 5 jogadores. Jogue o dado e responda a pergunta — se acertar avança, se errar continua onde estava.",
   launcherPlayButton: "Jogar o jogo de tabuleiro",
   launcherComingSoon: "Mais jogos em breve.",
   setupSubtitle: "Passem o dispositivo entre vocês — quem cair exatamente na chegada primeiro vence.",
@@ -184,7 +169,6 @@ const portuguese: BoardGameStrings = {
   playersListLabel: "Jogadores",
   boardLabel: "Tabuleiro do jogo",
   challengeHeading: (name) => `Desafio de ${name}`,
-  challengeSkip: "Pular (sem bônus)",
   challengeSubmit: "Enviar resposta",
   challengeContinue: "Continuar",
   winnerHeading: (name) => `${name} venceu!`,
@@ -195,18 +179,12 @@ const portuguese: BoardGameStrings = {
     switch (a.key) {
       case "turnStart":
         return `Vez de ${a.name}. Jogue o dado!`;
-      case "moved":
-        return `${a.name} tirou ${a.value} e avançou para a casa ${a.square} — um desafio!`;
-      case "bounced":
-        return `${a.name} tirou ${a.value}, passou da chegada e voltou para a casa ${a.square} — um desafio!`;
-      case "wonExact":
-        return `${a.name} tirou ${a.value} e caiu exatamente na chegada — ${a.name} venceu!`;
-      case "challengeCorrectMoved":
-        return `${a.name} acertou e avançou ${a.bonus} casas extras até a casa ${a.square} — outro desafio!`;
-      case "challengeCorrectWin":
-        return `${a.name} acertou, avançou ${a.bonus} casas extras e caiu exatamente na chegada — ${a.name} venceu!`;
-      case "challengeIncorrect":
-        return `${a.name} não acertou dessa vez — sem bônus, mas continue tentando.`;
+      case "correctAdvance":
+        if (a.won) return `${a.name} tirou ${a.value}, acertou e caiu exatamente na chegada — ${a.name} venceu!`;
+        if (a.bounced) return `${a.name} tirou ${a.value}, acertou, passou da chegada e voltou para a casa ${a.square}.`;
+        return `${a.name} tirou ${a.value}, acertou e avançou para a casa ${a.square}.`;
+      case "incorrectStay":
+        return `${a.name} tirou ${a.value} mas não acertou — continua na casa ${a.square}.`;
     }
   },
 };
@@ -214,7 +192,7 @@ const portuguese: BoardGameStrings = {
 const french: BoardGameStrings = {
   launcherTitle: "Course sur Plateau",
   launcherDescription:
-    "Un jeu de plateau à faire passer entre 2 à 5 joueurs. Lancez le dé, répondez à un défi sur chaque case et soyez le premier à tomber exactement sur l'arrivée.",
+    "Un jeu de plateau à faire passer entre 2 à 5 joueurs. Lancez le dé et répondez à la question — juste, vous avancez ; faux, vous restez sur place.",
   launcherPlayButton: "Jouer au jeu de plateau",
   launcherComingSoon: "D'autres jeux arrivent bientôt.",
   setupSubtitle: "Faites passer l'appareil à tour de rôle — le premier à tomber exactement sur l'arrivée gagne.",
@@ -234,7 +212,6 @@ const french: BoardGameStrings = {
   playersListLabel: "Joueurs",
   boardLabel: "Plateau du jeu",
   challengeHeading: (name) => `Défi de ${name}`,
-  challengeSkip: "Passer (sans bonus)",
   challengeSubmit: "Valider la réponse",
   challengeContinue: "Continuer",
   winnerHeading: (name) => `${name} gagne !`,
@@ -245,18 +222,12 @@ const french: BoardGameStrings = {
     switch (a.key) {
       case "turnStart":
         return `Tour de ${a.name}. Lancez le dé !`;
-      case "moved":
-        return `${a.name} a fait ${a.value} et avance à la case ${a.square} — un défi !`;
-      case "bounced":
-        return `${a.name} a fait ${a.value}, a dépassé l'arrivée et recule à la case ${a.square} — un défi !`;
-      case "wonExact":
-        return `${a.name} a fait ${a.value} et tombe exactement sur l'arrivée — ${a.name} gagne !`;
-      case "challengeCorrectMoved":
-        return `${a.name} a répondu correctement et avance de ${a.bonus} cases en plus jusqu'à la case ${a.square} — un autre défi !`;
-      case "challengeCorrectWin":
-        return `${a.name} a répondu correctement, avance de ${a.bonus} cases en plus et tombe exactement sur l'arrivée — ${a.name} gagne !`;
-      case "challengeIncorrect":
-        return `${a.name} n'a pas trouvé cette fois — pas de bonus, mais continue !`;
+      case "correctAdvance":
+        if (a.won) return `${a.name} a fait ${a.value}, a bien répondu et tombe exactement sur l'arrivée — ${a.name} gagne !`;
+        if (a.bounced) return `${a.name} a fait ${a.value}, a bien répondu, a dépassé l'arrivée et recule à la case ${a.square}.`;
+        return `${a.name} a fait ${a.value}, a bien répondu et avance à la case ${a.square}.`;
+      case "incorrectStay":
+        return `${a.name} a fait ${a.value} mais n'a pas trouvé la bonne réponse — reste sur la case ${a.square}.`;
     }
   },
 };
@@ -264,7 +235,7 @@ const french: BoardGameStrings = {
 const italian: BoardGameStrings = {
   launcherTitle: "Corsa sul Tabellone",
   launcherDescription:
-    "Un gioco da tavolo da passare tra 2 e 5 giocatori. Tira il dado, rispondi a una sfida su ogni casella e sii il primo a cadere esattamente sul traguardo.",
+    "Un gioco da tavolo da passare tra 2 e 5 giocatori. Tira il dado e rispondi alla domanda — giusta e avanzi, sbagliata e resti fermo.",
   launcherPlayButton: "Gioca al gioco da tavolo",
   launcherComingSoon: "Presto altri giochi.",
   setupSubtitle: "Passatevi il dispositivo a turno — il primo che cade esattamente sul traguardo vince.",
@@ -284,7 +255,6 @@ const italian: BoardGameStrings = {
   playersListLabel: "Giocatori",
   boardLabel: "Tabellone di gioco",
   challengeHeading: (name) => `Sfida di ${name}`,
-  challengeSkip: "Salta (senza bonus)",
   challengeSubmit: "Invia risposta",
   challengeContinue: "Continua",
   winnerHeading: (name) => `${name} vince!`,
@@ -295,18 +265,12 @@ const italian: BoardGameStrings = {
     switch (a.key) {
       case "turnStart":
         return `Turno di ${a.name}. Tira il dado!`;
-      case "moved":
-        return `${a.name} ha tirato ${a.value} ed è avanzato alla casella ${a.square} — una sfida!`;
-      case "bounced":
-        return `${a.name} ha tirato ${a.value}, ha superato il traguardo ed è tornato alla casella ${a.square} — una sfida!`;
-      case "wonExact":
-        return `${a.name} ha tirato ${a.value} ed è caduto esattamente sul traguardo — ${a.name} vince!`;
-      case "challengeCorrectMoved":
-        return `${a.name} ha risposto correttamente e avanza di ${a.bonus} caselle extra fino alla casella ${a.square} — un'altra sfida!`;
-      case "challengeCorrectWin":
-        return `${a.name} ha risposto correttamente, avanza di ${a.bonus} caselle extra ed è caduto esattamente sul traguardo — ${a.name} vince!`;
-      case "challengeIncorrect":
-        return `${a.name} non ha indovinato stavolta — niente bonus, ma continua così.`;
+      case "correctAdvance":
+        if (a.won) return `${a.name} ha tirato ${a.value}, ha risposto bene ed è caduto esattamente sul traguardo — ${a.name} vince!`;
+        if (a.bounced) return `${a.name} ha tirato ${a.value}, ha risposto bene, ha superato il traguardo ed è tornato alla casella ${a.square}.`;
+        return `${a.name} ha tirato ${a.value}, ha risposto bene ed è avanzato alla casella ${a.square}.`;
+      case "incorrectStay":
+        return `${a.name} ha tirato ${a.value} ma non ha risposto bene — resta sulla casella ${a.square}.`;
     }
   },
 };
@@ -314,7 +278,7 @@ const italian: BoardGameStrings = {
 const german: BoardGameStrings = {
   launcherTitle: "Brettspiel-Rennen",
   launcherDescription:
-    "Ein Brettspiel zum Weiterreichen für 2 bis 5 Spieler. Würfle, beantworte auf jedem Feld eine Aufgabe und komm als Erster genau im Ziel an.",
+    "Ein Brettspiel zum Weiterreichen für 2 bis 5 Spieler. Würfle und beantworte die Frage — richtig heißt vorrücken, falsch heißt stehen bleiben.",
   launcherPlayButton: "Brettspiel spielen",
   launcherComingSoon: "Weitere Spiele folgen bald.",
   setupSubtitle: "Reicht das Gerät reihum weiter — wer zuerst genau im Ziel landet, gewinnt.",
@@ -334,7 +298,6 @@ const german: BoardGameStrings = {
   playersListLabel: "Spieler",
   boardLabel: "Spielbrett",
   challengeHeading: (name) => `Aufgabe für ${name}`,
-  challengeSkip: "Überspringen (kein Bonus)",
   challengeSubmit: "Antwort abschicken",
   challengeContinue: "Weiter",
   winnerHeading: (name) => `${name} gewinnt!`,
@@ -345,18 +308,12 @@ const german: BoardGameStrings = {
     switch (a.key) {
       case "turnStart":
         return `${a.name} ist am Zug. Würfle!`;
-      case "moved":
-        return `${a.name} hat eine ${a.value} gewürfelt und ist auf Feld ${a.square} gezogen — eine Aufgabe!`;
-      case "bounced":
-        return `${a.name} hat eine ${a.value} gewürfelt, ist über das Ziel hinausgeschossen und auf Feld ${a.square} zurückgeprallt — eine Aufgabe!`;
-      case "wonExact":
-        return `${a.name} hat eine ${a.value} gewürfelt und ist genau im Ziel gelandet — ${a.name} gewinnt!`;
-      case "challengeCorrectMoved":
-        return `${a.name} hat richtig geantwortet und zieht ${a.bonus} Extrafelder bis Feld ${a.square} — noch eine Aufgabe!`;
-      case "challengeCorrectWin":
-        return `${a.name} hat richtig geantwortet, zieht ${a.bonus} Extrafelder und landet genau im Ziel — ${a.name} gewinnt!`;
-      case "challengeIncorrect":
-        return `${a.name} hatte diesmal keinen Erfolg — kein Bonus, aber weiter geht's.`;
+      case "correctAdvance":
+        if (a.won) return `${a.name} hat eine ${a.value} gewürfelt, richtig geantwortet und ist genau im Ziel gelandet — ${a.name} gewinnt!`;
+        if (a.bounced) return `${a.name} hat eine ${a.value} gewürfelt, richtig geantwortet, ist über das Ziel hinausgeschossen und auf Feld ${a.square} zurückgeprallt.`;
+        return `${a.name} hat eine ${a.value} gewürfelt, richtig geantwortet und ist auf Feld ${a.square} gezogen.`;
+      case "incorrectStay":
+        return `${a.name} hat eine ${a.value} gewürfelt, aber nicht richtig geantwortet — bleibt auf Feld ${a.square}.`;
     }
   },
 };

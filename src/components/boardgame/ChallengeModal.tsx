@@ -15,11 +15,11 @@ type ChallengeModalProps = {
 };
 
 // Copies PauseModal's focus-trap / Escape / focus-restore pattern verbatim,
-// with one rule change: Escape never grants a free bypass. Before an answer
-// is submitted, Escape behaves like the visible "Skip (no bonus)" button
-// (counts as incorrect, still shows feedback). After an answer is submitted,
-// Escape behaves like "Continue" — there is always a reachable action, never
-// a silent dismiss and never a keyboard trap.
+// with one rule change: there is no way to skip the question. Before an
+// answer is submitted, Escape does nothing — answering is the only way
+// forward, same as clicking "Submit answer" once an option is chosen.
+// After an answer is submitted, Escape behaves like "Continue", so there is
+// still always a reachable action and never a silent dismiss.
 export function ChallengeModal({ challenge, currentPlayerName, onResolve }: ChallengeModalProps) {
   const strings = useBoardGameStrings();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,20 +36,18 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
   // No reset-on-change effect needed: the parent mounts a fresh
   // ChallengeModal (keyed by exercise id) for every new challenge, so this
   // component's local answer state always starts clean already.
-  const handleSubmit = (skip: boolean) => {
+  const handleSubmit = () => {
     if (!challenge) return;
-    const correct = skip
-      ? false
-      : gradeExercise(challenge.exercise, { selectedOption, inputText, reorderedWords, recordingDone: false });
+    const correct = gradeExercise(challenge.exercise, { selectedOption, inputText, reorderedWords, recordingDone: false });
     setIsCorrect(correct);
     setIsSubmitted(true);
   };
 
   // Keep a ref to the latest submit/resolve behavior so the focus-trap effect
   // below only needs to run on open/close, not on every keystroke.
-  const latestRef = useRef({ isSubmitted, isCorrect, onResolve, handleSubmit });
+  const latestRef = useRef({ isSubmitted, isCorrect, onResolve });
   useEffect(() => {
-    latestRef.current = { isSubmitted, isCorrect, onResolve, handleSubmit };
+    latestRef.current = { isSubmitted, isCorrect, onResolve };
   });
 
   useEffect(() => {
@@ -60,11 +58,9 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        const { isSubmitted: submitted, isCorrect: correct, onResolve: resolve, handleSubmit: submit } = latestRef.current;
+        const { isSubmitted: submitted, isCorrect: correct, onResolve: resolve } = latestRef.current;
         if (submitted) {
           resolve(correct);
-        } else {
-          submit(true);
         }
         return;
       }
@@ -177,21 +173,9 @@ export function ChallengeModal({ challenge, currentPlayerName, onResolve }: Chal
 
         <div className="flex gap-3 w-full">
           {!isSubmitted ? (
-            <>
-              <Button type="button" variant="secondary" size="md" className="flex-1" onClick={() => handleSubmit(true)}>
-                {strings.challengeSkip}
-              </Button>
-              <Button
-                type="button"
-                variant="primary"
-                size="md"
-                className="flex-[2]"
-                disabled={isAnswerMissing}
-                onClick={() => handleSubmit(false)}
-              >
-                {strings.challengeSubmit}
-              </Button>
-            </>
+            <Button type="button" variant="primary" size="md" className="w-full" disabled={isAnswerMissing} onClick={handleSubmit}>
+              {strings.challengeSubmit}
+            </Button>
           ) : (
             <Button type="button" variant="primary" size="md" className="w-full" onClick={() => onResolve(isCorrect)}>
               {strings.challengeContinue}

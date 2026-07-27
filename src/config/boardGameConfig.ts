@@ -6,7 +6,6 @@ import { EXERCISES_DATABASE } from "./lessonsData";
 // smaller board keeps a full game (with 2-5 players each answering on
 // nearly every turn) to a reasonable length.
 export const BOARD_LENGTH = 20;
-export const CHALLENGE_BONUS_SQUARES = 2;
 export const WIN_XP_REWARD = 100;
 
 function generateBoardSquares(length: number): BoardSquare[] {
