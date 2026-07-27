@@ -25,7 +25,7 @@ const skillLabels: Record<ActiveSkill, { icon: string; label: string }> = {
   writing: { icon: "✍️", label: "Writing" },
 };
 
-const PANEL_ID = "learning-path-panel";
+const PANEL_ID = "main-content";
 
 export function LearningPathPage({
   activeSkill,
@@ -54,14 +54,6 @@ export function LearningPathPage({
       data-node-id="12:1589"
       data-name="Home / Ruta de Aprendizaje Speaking"
     >
-      {/*
-        Skip link: first tab stop of the page, so keyboard and screen reader
-        users can jump straight to the levels without walking the whole header.
-      */}
-      <a href={`#${PANEL_ID}`} className="skip-link">
-        Skip to the learning path
-      </a>
-
       <AppHeader
         onHomeClick={() => onNavigate("#/dashboard")}
         onProfileClick={() => onNavigate("#/profile")}
@@ -76,6 +68,7 @@ export function LearningPathPage({
           panelId={PANEL_ID}
         />
 
+        {/* WCAG 1.3.1 & 2.4.1: <main id="main-content"> para estructura semántica y destino de Skip Link */}
         <main
           id={PANEL_ID}
           role="tabpanel"
@@ -103,17 +96,18 @@ export function LearningPathPage({
             </div>
 
             <div className="pt-6 box-border text-left">
-              <h2 className="text-learningPathHeading text-text-secondary text-left m-0">
+              {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio 6.10:1 sobre background.app */}
+              <h2 className="text-learningPathHeading text-text-secondaryAccessible text-left m-0">
                 Learning Path
               </h2>
-              <p className="text-caption text-text-secondary text-left mt-2 mb-0">
+              <p className="text-caption text-text-secondaryAccessible text-left mt-2 mb-0">
                 Every level has 3 lessons. Use Tab to move through the levels and
                 Enter to open the one that is available.
               </p>
             </div>
 
-            {/* Live region: explains a blocked level without a browser alert. */}
-            <p role="status" aria-live="polite" className="text-caption text-danger-500 text-left mt-3 mb-0 min-h-[18px]">
+            {/* Live region: explica un nivel bloqueado sin alerta de navegador */}
+            <p role="status" aria-live="polite" className="text-caption text-danger-textAccessible text-left mt-3 mb-0 min-h-[18px]">
               {statusMessage}
             </p>
 
@@ -155,7 +149,7 @@ export function LearningPathPage({
 
             <div className="pt-10 box-border">
               <div className="border-t border-border-default pt-6 flex justify-center items-center w-full box-border">
-                <span className="text-caption text-text-secondary">
+                <span className="text-caption text-text-secondaryAccessible">
                   © 2026 LingoGuru
                 </span>
               </div>

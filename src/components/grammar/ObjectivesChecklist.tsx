@@ -15,11 +15,12 @@ type ObjectivesChecklistProps = {
 function ObjectiveItem({ children }: { children: ReactNode }) {
   return (
     <li className="flex items-start gap-3 box-border m-0">
+      {/* WCAG 1.4.3: Usar bg-warning-textAccessible (#B45309) para texto blanco ✓ con ratio 6.10:1 */}
       <span
         aria-hidden="true"
-        className="w-[22px] h-[22px] mt-0.5 rounded-full bg-warning-500 flex items-center justify-center text-text-onPrimary shrink-0"
+        className="w-[22px] h-[22px] mt-0.5 rounded-full bg-warning-textAccessible flex items-center justify-center text-text-onPrimary shrink-0"
       >
-        <span className="text-caption">✓</span>
+        <span className="text-caption font-bold">✓</span>
       </span>
       <p className="text-bodySmall text-text-primary leading-[22.5px] m-0">
         {children}
@@ -53,8 +54,9 @@ export function ObjectivesChecklist({
     >
       <div className="w-full min-h-[396px] box-border py-8 px-6 md:px-16 flex flex-col justify-center">
         <div className="pb-6 box-border">
+          {/* WCAG 1.4.3: Usar text-primary-accessible (#3550DC) sobre bg-primary-soft (#EEF1FD) para ratio 5.58:1 */}
           <p
-            className="inline-flex items-center h-[26px] px-3 rounded-full bg-primary-soft text-primary-500 box-border m-0"
+            className="inline-flex items-center h-[26px] px-3 rounded-full bg-primary-soft text-primary-accessible font-bold box-border m-0"
             data-node-id="81:6"
             data-name="Text"
           >
@@ -74,7 +76,8 @@ export function ObjectivesChecklist({
           </p>
         </div>
 
-        <h2 className="text-eyebrow text-text-secondary m-0 pb-3">What you will learn</h2>
+        {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio 6.47:1 */}
+        <h2 className="text-eyebrow text-text-secondaryAccessible font-bold m-0 pb-3">What you will learn</h2>
 
         <ul className="flex flex-col gap-3 box-border list-none p-0 m-0" data-node-id="81:14">
           {objectives.map((objective) => (

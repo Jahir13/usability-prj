@@ -23,10 +23,11 @@ export function GameNav({ progress, counter, onPause }: GameNavProps) {
       data-node-id="12:2563"
       data-name="GameNav"
     >
+      {/* WCAG 2.4.7: Indicador de foco visible para botón de pausa */}
       <button
         type="button"
         onClick={onPause}
-        className="border-0 p-0 bg-transparent inline-flex items-center gap-2 text-text-primary cursor-pointer shrink-0 ml-4"
+        className="border-0 p-1 rounded-sm bg-transparent inline-flex items-center gap-2 text-text-primary cursor-pointer shrink-0 ml-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1"
         aria-label="Pause"
         data-node-id="12:2587"
         data-name="Button"

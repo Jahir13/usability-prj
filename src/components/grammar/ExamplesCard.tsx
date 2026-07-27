@@ -23,13 +23,14 @@ function ExampleRow({ example }: { example: ExamplePair }) {
         </span>
 
         {/* The arrow is decorative; the relation is spoken as "in Spanish". */}
-        <span aria-hidden="true" className="w-3 text-caption text-text-secondary text-center shrink-0">
+        <span aria-hidden="true" className="w-3 text-caption text-text-secondaryAccessible text-center shrink-0 font-bold">
           →
         </span>
         <span className="sr-only">in Spanish:</span>
 
         <span className="box-border flex items-center">
-          <span className="text-label text-text-secondary m-0">{example.translation}</span>
+          {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio de contraste 5.71:1 */}
+          <span className="text-label text-text-secondaryAccessible font-medium m-0">{example.translation}</span>
         </span>
       </div>
     </li>
@@ -49,7 +50,8 @@ export function ExamplesCard({ title, examples }: ExamplesCardProps) {
     >
       <div className="w-full h-full box-border p-6 flex flex-col">
         <div className="pb-3 box-border">
-          <h2 className="text-eyebrow text-warning-500 m-0" data-node-id="81:46">
+          {/* WCAG 1.4.3: Usar text-warning-textAccessible (#B45309) para ratio de contraste 5.45:1 sobre surface-softAmber */}
+          <h2 className="text-eyebrow text-warning-textAccessible font-bold m-0" data-node-id="81:46">
             {title}
           </h2>
         </div>

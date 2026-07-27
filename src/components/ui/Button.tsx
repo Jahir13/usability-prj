@@ -24,15 +24,15 @@ export function Button({
         clsx(
           // Base button styles
           "inline-flex items-center justify-center font-body font-bold border-0 cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-          // Variant classes mapping to figma tokens / design system styles
+          /* WCAG 1.4.3: Variant classes mapping con tokens de contraste accesible */
           {
             "bg-primary-500 text-text-onPrimary shadow-primaryCta hover:scale-[1.02] active:scale-95 hover:shadow-[0_6px_20px_rgba(79,110,247,0.4)] focus-visible:ring-primary-500":
               variant === "primary",
-            "bg-surface-white border border-border-default text-text-secondary hover:bg-background-app active:scale-95 focus-visible:ring-border-default":
+            "bg-surface-white border border-border-default text-text-secondaryAccessible hover:bg-background-app active:scale-95 focus-visible:ring-primary-500":
               variant === "secondary",
-            "bg-surface-white border border-primary-500 text-primary-500 hover:bg-primary-soft active:scale-95 focus-visible:ring-primary-500":
+            "bg-surface-white border border-primary-accessible text-primary-accessible hover:bg-primary-soft active:scale-95 focus-visible:ring-primary-500":
               variant === "outline-primary",
-            "bg-transparent border border-border-default text-danger-500 hover:bg-danger-soft active:scale-95 focus-visible:ring-danger-500":
+            "bg-transparent border border-border-default text-danger-textAccessible hover:bg-danger-soft active:scale-95 focus-visible:ring-danger-500":
               variant === "danger",
             "bg-transparent border-0 text-text-tertiary hover:opacity-80 active:scale-95 focus-visible:ring-primary-500":
               variant === "ghost",

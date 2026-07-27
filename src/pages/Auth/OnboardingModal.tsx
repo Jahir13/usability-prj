@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "../../components/ui/Button";
 
 type OnboardingModalProps = {
@@ -85,18 +85,39 @@ export function OnboardingModal({
   onBack,
   onSkip,
 }: OnboardingModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
   const safeStep =
     totalSteps > 0 ? Math.min(totalSteps, Math.max(1, currentStep)) : 0;
   
   const stepIndex = Math.min(stepsData.length - 1, Math.max(0, safeStep - 1));
   const currentStepData = stepsData[stepIndex] ?? stepsData[0];
 
+  // WCAG 2.1.2: Focus Trap en OnboardingModal para evitar que la navegación por teclado se pierda al fondo
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
         onNext();
       } else if (e.key === "ArrowLeft") {
         onBack();
+      } else if (e.key === "Tab" && modalRef.current) {
+        const focusables = modalRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -104,9 +125,10 @@ export function OnboardingModal({
   }, [onNext, onBack]);
 
   return (
-    <div className="relative min-h-screen w-full bg-background-app overflow-hidden box-border" data-node-id="8:250" data-name="Tutorial">
+    <main id="main-content" tabIndex={-1} className="relative min-h-screen w-full bg-background-app overflow-hidden box-border focus-visible:outline-none" data-node-id="8:250" data-name="Tutorial">
       <div className="min-h-screen w-full bg-background-app flex items-center justify-center box-border" data-node-id="8:251" data-name="Body">
         <div 
+          ref={modalRef}
           className="w-[720px] h-[472px] rounded-[24px] bg-surface-white shadow-[0px_4px_16px_rgba(26,29,46,0.08)] box-border relative overflow-hidden" 
           data-node-id="8:252" 
           data-name="Container"
@@ -139,6 +161,7 @@ export function OnboardingModal({
                   <span
                     className="font-body font-normal text-[20px] leading-[30px] text-text-primary text-center"
                     data-node-id="8:274"
+                    aria-hidden="true"
                   >
                     {currentStepData.emoji}
                   </span>
@@ -170,7 +193,8 @@ export function OnboardingModal({
                 data-node-id="8:279"
                 data-name="Paragraph"
               >
-                <p className="text-body text-text-secondary text-center m-0" data-node-id="8:280">
+                {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio 6.47:1 */}
+                <p className="text-body text-text-secondaryAccessible text-center m-0" data-node-id="8:280">
                   {currentStepData.description}
                 </p>
               </div>
@@ -189,25 +213,26 @@ export function OnboardingModal({
               data-node-id="8:285"
               data-name="Container"
             >
-            <div
-              className="flex items-center gap-4 w-full"
-            >
-              <Button
-                variant="outline-primary"
-                size="md"
-                onClick={onBack}
-                className="flex-[129.328_0_0] font-medium text-[15px] leading-[22.5px]"
+              <div
+                className="flex items-center gap-4 w-full"
               >
-                Back
-              </Button>
-              <Button
-                variant="primary"
-                size="md"
-                onClick={onNext}
-                className="flex-[254.672_0_0] font-medium text-[15px] leading-[22.5px]"
-              >
-                {safeStep === totalSteps ? "Finish" : "Next"}
-              </Button>
+                <Button
+                  variant="outline-primary"
+                  size="md"
+                  onClick={onBack}
+                  className="flex-[129.328_0_0] font-medium text-[15px] leading-[22.5px]"
+                >
+                  Back
+                </Button>
+                <Button
+                  variant="primary"
+                  size="md"
+                  onClick={onNext}
+                  className="flex-[254.672_0_0] font-medium text-[15px] leading-[22.5px]"
+                >
+                  {safeStep === totalSteps ? "Finish" : "Next"}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -222,7 +247,6 @@ export function OnboardingModal({
       >
         Skip →
       </Button>
-    </div>
-  </div>
+    </main>
   );
 }

@@ -44,7 +44,8 @@ export function FillBlankExercise({
       </ReadableRegion>
 
       <div className="flex flex-col gap-2 text-left">
-        <label htmlFor="fill-blank-input" className="text-labelSmall text-text-secondary">
+        {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio de contraste 6.47:1 */}
+        <label htmlFor="fill-blank-input" className="text-labelSmall text-text-secondaryAccessible font-medium">
           {answerLabel}
         </label>
         <Input
@@ -57,7 +58,7 @@ export function FillBlankExercise({
           aria-describedby={describedByIds}
         />
         {expectedFormat && (
-          <p id={formatId} className="text-caption text-text-secondary m-0">
+          <p id={formatId} className="text-caption text-text-secondaryAccessible m-0">
             {expectedFormat}
           </p>
         )}

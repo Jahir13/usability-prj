@@ -34,14 +34,15 @@ const statusSpokenByStatus: Record<LevelStatus, string> = {
   blocked: "locked, finish the previous level to unlock it",
 };
 
+/* WCAG 1.4.3: Ratios accesibles para badges (done: 5.92:1, in-progress: 5.58:1, blocked: 4.85:1) */
 const badgeVariants = cva(
-  "h-[26px] rounded-full flex items-center justify-center box-border px-[10px] shrink-0",
+  "h-[26px] rounded-full flex items-center justify-center box-border px-[10px] shrink-0 font-bold",
   {
     variants: {
       status: {
-        done: "bg-surface-softGreen text-success-500",
-        "in-progress": "bg-primary-soft text-primary-500",
-        blocked: "bg-danger-soft text-danger-500",
+        done: "bg-surface-softGreen text-success-textAccessible",
+        "in-progress": "bg-primary-soft text-primary-accessible",
+        blocked: "bg-danger-soft text-danger-textAccessible",
       },
     },
     defaultVariants: {

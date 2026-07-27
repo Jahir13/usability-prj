@@ -67,10 +67,11 @@ export function SpeakingExercise({
             <Mic aria-hidden="true" size={32} />
           </button>
 
+          {/* WCAG 1.4.3: Ratios accesibles para texto y estados */}
           <span
             role="status"
             aria-live="polite"
-            className={`text-labelSmall ${isRecording ? "text-danger-500" : "text-text-secondary"}`}
+            className={`text-labelSmall font-medium ${isRecording ? "text-danger-textAccessible" : "text-text-secondaryAccessible"}`}
           >
             {isRecording
               ? "Recording... speak now"
@@ -80,7 +81,7 @@ export function SpeakingExercise({
           </span>
 
           {recordingDone && (
-            <div className="inline-flex items-center gap-2 bg-success-soft text-success-500 p-2 px-4 rounded-full text-sm font-medium animate-fadeInUp">
+            <div className="inline-flex items-center gap-2 bg-surface-softGreen text-success-textAccessible p-2 px-4 rounded-full text-sm font-bold animate-fadeInUp">
               <CheckCircle2 aria-hidden="true" size={16} /> Audio successfully analyzed
             </div>
           )}
@@ -89,7 +90,7 @@ export function SpeakingExercise({
             type="button"
             disabled={isSubmitted}
             onClick={onToggleTypedAnswer}
-            className="inline-flex items-center gap-2 text-labelSmall text-primary-500 underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center gap-2 text-labelSmall text-primary-accessible font-medium underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Keyboard size={16} aria-hidden="true" />
             I'd rather type my answer
@@ -98,7 +99,7 @@ export function SpeakingExercise({
       ) : (
         <div className="flex flex-col gap-3 w-full items-center">
           <div className="flex flex-col gap-2 w-full text-left">
-            <label htmlFor="speaking-typed-input" className="text-labelSmall text-text-secondary">
+            <label htmlFor="speaking-typed-input" className="text-labelSmall text-text-secondaryAccessible font-medium">
               {answerLabel}
             </label>
             <Input
@@ -111,7 +112,7 @@ export function SpeakingExercise({
               aria-describedby={describedByIds}
             />
             {expectedFormat && (
-              <p id={formatId} className="text-caption text-text-secondary m-0">
+              <p id={formatId} className="text-caption text-text-secondaryAccessible m-0">
                 {expectedFormat}
               </p>
             )}
@@ -121,7 +122,7 @@ export function SpeakingExercise({
             type="button"
             disabled={isSubmitted}
             onClick={onToggleTypedAnswer}
-            className="inline-flex items-center gap-2 text-labelSmall text-primary-500 underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center gap-2 text-labelSmall text-primary-accessible font-medium underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Mic size={16} aria-hidden="true" />
             Use the microphone instead

@@ -27,32 +27,34 @@ export function ResultsSummaryPage({
   return (
     <Card className="max-w-[560px] w-full mx-auto my-10 p-10 text-center flex flex-col items-center gap-8 animate-resultsFadeIn">
       <div className={`w-[100px] h-[100px] rounded-full flex items-center justify-center ${
-        isGood ? "bg-success-soft text-success-500" : "bg-primary-soft text-primary-500"
+        isGood ? "bg-surface-softGreen text-success-textAccessible" : "bg-primary-soft text-primary-accessible"
       }`}>
-        {isPerfect ? <Trophy size={48} /> : <Award size={48} />}
+        {isPerfect ? <Trophy size={48} aria-hidden="true" /> : <Award size={48} aria-hidden="true" />}
       </div>
 
       <div>
         <h1 className="font-heading font-extrabold text-[32px] m-0 mb-2">
           {isPerfect ? "Perfect Score!" : isGood ? "Great Job!" : "Keep Practicing!"}
         </h1>
-        <p className="text-body text-text-secondary m-0">
+        {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E = 6.47:1) */}
+        <p className="text-body text-text-secondaryAccessible m-0">
           You completed the <strong>{levelTitle}</strong> grammar practice exercises.
         </p>
       </div>
 
       <div className="flex gap-6 w-full justify-center">
         <div className="bg-background-app p-4 px-6 rounded-sm flex flex-col items-center flex-1">
-          <span className="text-caption text-text-secondary">SCORE</span>
+          <span className="text-caption text-text-secondaryAccessible font-bold">SCORE</span>
           <span className="text-brand text-2xl text-text-primary">
             {score} / {total}
           </span>
         </div>
 
-        <div className="bg-success-soft p-4 px-6 rounded-sm flex flex-col items-center flex-1">
-          <span className="text-caption text-success-500">XP EARNED</span>
-          <span className="text-brand text-2xl text-success-500 flex items-center gap-1">
-            <Zap size={20} className="fill-success-500" /> +{xpEarned}
+        <div className="bg-surface-softGreen p-4 px-6 rounded-sm flex flex-col items-center flex-1">
+          {/* WCAG 1.4.3: Usar text-success-textAccessible (#166534 = 5.92:1) */}
+          <span className="text-caption text-success-textAccessible font-bold">XP EARNED</span>
+          <span className="text-brand text-2xl text-success-textAccessible font-bold flex items-center gap-1">
+            <Zap size={20} className="fill-success-textAccessible text-success-textAccessible" aria-hidden="true" /> +{xpEarned}
           </span>
         </div>
       </div>

@@ -10,18 +10,22 @@ export const figmaTokens = {
       500: "#4f6ef7",
       soft: "#eef1fd",
       onPrimary: "#ffffff",
+      accessible: "#3550dc",
     },
     success: {
       500: "#3cc97a",
       soft: "#e6f9ee",
+      textAccessible: "#166534",
     },
     warning: {
       500: "#f7a14f",
       soft: "rgba(247,161,79,0.1)",
+      textAccessible: "#b45309",
     },
     danger: {
       500: "#ea2b2b",
       soft: "#ffebeb",
+      textAccessible: "#c51d1d",
     },
     background: {
       app: "#f4f5fa",
@@ -40,10 +44,13 @@ export const figmaTokens = {
     text: {
       primary: "#1a1d2e",
       secondary: "#8a8fa8",
+      secondaryAccessible: "#595d6e",
       tertiary: "#3d4263",
       onPrimary: "#ffffff",
       muted: "#8a8fa8",
+      mutedAccessible: "#595d6e",
       link: "#4f6ef7",
+      linkAccessible: "#3550dc",
     },
     border: {
       default: "#e8eaf2",

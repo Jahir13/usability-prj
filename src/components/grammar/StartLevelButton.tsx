@@ -38,21 +38,22 @@ export function StartLevelButton({
         </span>
       </button>
 
+      {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E = 6.47:1) y text-success-textAccessible (#166534 = 6.71:1) */}
       <p
         className="w-full flex items-center justify-center gap-4 pt-4 box-border m-0"
         data-node-id="81:71"
       >
-        <span className="text-labelSmall text-text-secondary whitespace-nowrap">
+        <span className="text-labelSmall text-text-secondaryAccessible font-medium whitespace-nowrap">
           {exercises} exercises
         </span>
         <span className="text-labelSmall text-border-default whitespace-nowrap" aria-hidden="true">
           ·
         </span>
-        <span className="text-labelSmall text-text-secondary whitespace-nowrap">{minutes}</span>
+        <span className="text-labelSmall text-text-secondaryAccessible font-medium whitespace-nowrap">{minutes}</span>
         <span className="text-labelSmall text-border-default whitespace-nowrap" aria-hidden="true">
           ·
         </span>
-        <span className="text-labelSmall text-success-500 whitespace-nowrap">{xp}</span>
+        <span className="text-labelSmall text-success-textAccessible font-bold whitespace-nowrap">{xp}</span>
       </p>
     </div>
   );

@@ -38,13 +38,13 @@ export function StatusMarker({
             "w-12 h-12 text-learningPathLevelTitle": size === "lg",
             "w-5 h-5 text-caption rounded-[10px]": size === "sm", // rounded-sm is 10px, maps to sidebarItemIconRadius
           },
-          // Status styles mapping to design system tokens
+          /* WCAG 1.4.3: Status styles mapping con tokens accesibles */
           {
-            "bg-surface-softGreen text-success-500": status === "done",
-            "bg-primary-soft text-primary-500": status === "in-progress" && size === "sm",
-            "bg-primary-soft text-primary-500 border-2 border-primary-500 animate-pulse": status === "in-progress" && size === "lg",
-            "bg-background-muted text-text-secondary": status === "blocked" && size === "sm",
-            "bg-danger-soft text-danger-500 opacity-70": status === "blocked" && size === "lg",
+            "bg-surface-softGreen text-success-textAccessible": status === "done",
+            "bg-primary-soft text-primary-accessible": status === "in-progress" && size === "sm",
+            "bg-primary-soft text-primary-accessible border-2 border-primary-accessible animate-pulse": status === "in-progress" && size === "lg",
+            "bg-background-muted text-text-secondaryAccessible": status === "blocked" && size === "sm",
+            "bg-danger-soft text-danger-textAccessible opacity-80": status === "blocked" && size === "lg",
           }
         ),
         className

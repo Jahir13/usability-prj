@@ -17,7 +17,7 @@ type GrammarLessonPageProps = {
   onNavigate: (route: string) => void;
 };
 
-const PANEL_ID = "lesson-panel";
+const PANEL_ID = "main-content";
 
 export function GrammarLessonPage({
   levelId,
@@ -75,10 +75,6 @@ export function GrammarLessonPage({
       data-node-id="8:340"
       data-name="Panel Central de Gramática"
     >
-      <a href={`#${PANEL_ID}`} className="skip-link">
-        Skip to the lesson content
-      </a>
-
       <AppHeader
         onHomeClick={() => onNavigate("#/dashboard")}
         onProfileClick={() => onNavigate("#/profile")}
@@ -98,6 +94,7 @@ export function GrammarLessonPage({
           }
         />
 
+        {/* WCAG 1.3.1 & 2.4.1: <main id="main-content"> para la lección */}
         <main
           id={PANEL_ID}
           role="tabpanel"
@@ -106,13 +103,14 @@ export function GrammarLessonPage({
           className="flex-1 min-w-0 box-border w-full flex flex-col items-center overflow-y-auto focus-visible:outline-none"
         >
           <div className="w-full max-w-[672px] box-border p-4 md:p-8 flex flex-col gap-5">
-            <p className="text-caption text-text-secondary text-left m-0">
+            {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio de contraste 6.47:1 */}
+            <p className="text-caption text-text-secondaryAccessible text-left m-0">
               Lesson {topicIndex + 1} of {topics.length} in this level. Press Tab to read
               the description, the rule and the examples; the arrow keys move between
               lessons.
             </p>
 
-            <p role="status" aria-live="polite" className="text-caption text-danger-500 text-left m-0 min-h-[18px]">
+            <p role="status" aria-live="polite" className="text-caption text-danger-textAccessible text-left m-0 min-h-[18px]">
               {statusMessage}
             </p>
 

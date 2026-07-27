@@ -81,9 +81,10 @@ function LessonRow({
           content={item.marker}
         />
 
+        {/* WCAG 1.4.3: Usar text-primary-accessible (#3550DC) sobre bg-primary-soft (#EEF1FD) para ratio 5.58:1 */}
         <span
           className={`text-label whitespace-nowrap ${
-            active ? "text-primary-500" : "text-text-primary"
+            active ? "text-primary-accessible font-bold" : "text-text-primary"
           } ${isBlocked ? "opacity-65" : "opacity-100"}`}
         >
           {item.label}
@@ -103,7 +104,7 @@ export function LessonSidebar({
   activeTopicId,
   onTopicChange,
   topics,
-  panelId = "lesson-panel",
+  panelId = "main-content",
   onBlockedTopicClick,
 }: LessonSidebarProps) {
   const buttonsRef = useRef<Array<HTMLButtonElement | null>>([]);
@@ -176,33 +177,36 @@ export function LessonSidebar({
     >
       <div className="flex flex-col box-border pt-4 w-full md:h-full md:pt-6">
         <div className="h-9 box-border pb-4 px-5">
-          <span className="text-eyebrow">{eyebrowText}</span>
+          <span className="text-eyebrow text-text-secondaryAccessible font-bold">{eyebrowText}</span>
         </div>
 
-        <div
-          role="tablist"
-          aria-label="Lessons of this level"
-          aria-orientation="vertical"
-          className="flex flex-row overflow-x-auto w-full md:flex-col md:overflow-x-visible md:h-[478px]"
-          data-node-id="8:346"
-          data-name="Inline content"
-        >
-          {items.map((item, index) => (
-            <LessonRow
-              key={item.id}
-              item={item}
-              index={index}
-              total={items.length}
-              panelId={panelId}
-              active={item.id === (activeTopicId ?? items[0]?.id)}
-              buttonRef={(element) => {
-                buttonsRef.current[index] = element;
-              }}
-              onClick={() => selectItem(item)}
-              onKeyDown={(event) => handleKeyDown(event, index)}
-            />
-          ))}
-        </div>
+        {/* WCAG 1.3.1: Envolver la lista de lecciones en un <nav> semántico */}
+        <nav aria-label="Lessons navigation" className="w-full">
+          <div
+            role="tablist"
+            aria-label="Lessons of this level"
+            aria-orientation="vertical"
+            className="flex flex-row overflow-x-auto w-full md:flex-col md:overflow-x-visible md:h-[478px]"
+            data-node-id="8:346"
+            data-name="Inline content"
+          >
+            {items.map((item, index) => (
+              <LessonRow
+                key={item.id}
+                item={item}
+                index={index}
+                total={items.length}
+                panelId={panelId}
+                active={item.id === (activeTopicId ?? items[0]?.id)}
+                buttonRef={(element) => {
+                  buttonsRef.current[index] = element;
+                }}
+                onClick={() => selectItem(item)}
+                onKeyDown={(event) => handleKeyDown(event, index)}
+              />
+            ))}
+          </div>
+        </nav>
       </div>
     </aside>
   );

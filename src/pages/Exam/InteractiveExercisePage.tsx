@@ -243,17 +243,19 @@ export function InteractiveExercisePage({
         onPause={() => togglePause(true)}
       />
 
-      <main className="pt-16 px-4 md:px-8 box-border flex flex-col items-center">
+      {/* WCAG 1.3.1 & 2.4.1: Usar <main id="main-content"> para estructura semántica y destino de Skip Link */}
+      <main id="main-content" tabIndex={-1} className="pt-16 px-4 md:px-8 box-border flex flex-col items-center focus-visible:outline-none">
         <Card className="max-w-[680px] w-full mx-auto my-10 p-8 flex flex-col gap-6">
           <div className="flex justify-between text-left">
-            <span className="text-eyebrow text-primary-500">
+            {/* WCAG 1.4.3: Usar text-primary-accessible (#3550DC = 6.32:1) y text-text-secondaryAccessible (#595D6E = 6.47:1) */}
+            <span className="text-eyebrow text-primary-accessible font-bold">
               EXERCISE {session.currentExerciseIndex + 1} OF {session.exercises.length}
             </span>
             <span
               className={`text-labelSmall ${
                 remainingTime < CONFIG.TIMER.WARNING_THRESHOLD_SECONDS
-                  ? "text-danger-500"
-                  : "text-text-secondary"
+                  ? "text-danger-textAccessible font-bold"
+                  : "text-text-secondaryAccessible font-medium"
               }`}
             >
               <span aria-hidden="true">⏱️ </span>
@@ -294,7 +296,8 @@ export function InteractiveExercisePage({
                 onClick={() => setShowGuidance((prev) => !prev)}
                 aria-expanded={showGuidance}
                 aria-controls={GUIDANCE_ID}
-                className="inline-flex items-center gap-2 text-labelSmall text-primary-500 underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
+                /* WCAG 1.4.3: Usar text-primary-accessible (#3550DC) para ratio de contraste 6.32:1 */
+                className="inline-flex items-center gap-2 text-labelSmall text-primary-accessible font-medium underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
               >
                 <HelpCircle size={16} aria-hidden="true" />
                 {showGuidance ? "Hide how to answer" : "How to answer"}

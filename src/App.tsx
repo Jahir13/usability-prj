@@ -227,6 +227,13 @@ function AppContent() {
 export default function App() {
   return (
     <LingoProviders>
+      {/* WCAG 2.4.1: Skip link accesible global para saltar la navegación e ir directamente al contenido principal */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded-md focus:shadow-lg focus:text-primary-500 focus:font-bold focus:outline-none focus:ring-2 focus:ring-primary-500"
+      >
+        Saltar al contenido principal
+      </a>
       <AppContent />
     </LingoProviders>
   );

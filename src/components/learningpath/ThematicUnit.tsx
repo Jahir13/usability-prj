@@ -29,9 +29,10 @@ export function ThematicUnit({
 
   return (
     <section className="relative w-full box-border" aria-labelledby={headingId}>
+      {/* WCAG 1.4.3: Usar text-warning-textAccessible (#B45309) sobre surface-softAmber para ratio 5.45:1 */}
       <h3
         id={headingId}
-        className="inline-flex items-center h-[26px] rounded-full px-3 bg-surface-softAmber text-warning-500 box-border text-left m-0"
+        className="inline-flex items-center h-[26px] rounded-full px-3 bg-surface-softAmber text-warning-textAccessible box-border text-left m-0 font-bold"
       >
         <span className="text-learningPathUnitTag">
           Thematic Unit: {title}

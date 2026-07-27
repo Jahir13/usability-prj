@@ -18,7 +18,8 @@ export function RuleCard({ title = "MAIN RULE", formula, formulaLabel }: RuleCar
       className="w-full min-h-[120px] py-6 px-[28px] text-left bg-background-elevated border-l-4 border-primary-500 border-t border-r border-b border-t-border-default border-r-border-default border-b-border-default"
     >
       <div className="pb-3 text-left">
-        <h2 className="text-eyebrow text-text-secondary m-0">{title}</h2>
+        {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) sobre background.elevated (#F0F1F8) para ratio 6.10:1 */}
+        <h2 className="text-eyebrow text-text-secondaryAccessible font-bold m-0">{title}</h2>
       </div>
 
       <div className="box-border text-left">{formula}</div>

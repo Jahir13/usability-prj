@@ -43,11 +43,12 @@ export function ListeningExercise({
   return (
     <div className="flex flex-col gap-5 items-center">
       <div className="flex flex-col gap-3 items-center">
+        {/* WCAG 1.4.3: Usar text-warning-textAccessible (#B45309 = 5.45:1) en el botón de reproducción de audio */}
         <button
           type="button"
           onClick={onPlayAudio}
           aria-label={isPlayingAudio ? "Playing the sentence" : "Play the audio of the sentence"}
-          className={`w-[60px] h-[60px] rounded-full border-[1.5px] border-warning-500 cursor-pointer flex items-center justify-center text-warning-500 shadow-warningGlowMuted hover:shadow-warningGlow transition-all hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-warning-500 ${
+          className={`w-[60px] h-[60px] rounded-full border-[1.5px] border-warning-textAccessible cursor-pointer flex items-center justify-center text-warning-textAccessible shadow-warningGlowMuted hover:shadow-warningGlow transition-all hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-warning-500 ${
             isPlayingAudio ? "bg-warning-soft" : "bg-surface-softOrange"
           }`}
         >
@@ -57,7 +58,7 @@ export function ListeningExercise({
             <Play aria-hidden="true" size={24} className="ml-1" />
           )}
         </button>
-        <span className="text-labelSmall text-text-secondary">
+        <span className="text-labelSmall text-text-secondaryAccessible font-medium">
           {isPlayingAudio ? "Playing audio..." : "Play the audio (or read the transcript)"}
         </span>
 
@@ -67,7 +68,7 @@ export function ListeningExercise({
             onClick={() => setShowTranscript((prev) => !prev)}
             aria-expanded={showTranscript}
             aria-controls="listening-transcript"
-            className="inline-flex items-center gap-2 text-labelSmall text-primary-500 underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
+            className="inline-flex items-center gap-2 text-labelSmall text-primary-accessible font-medium underline underline-offset-2 bg-transparent border-0 cursor-pointer p-1 rounded-sm hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
           >
             <FileText size={16} aria-hidden="true" />
             {showTranscript ? "Hide transcript" : "Show transcript"}
@@ -78,7 +79,7 @@ export function ListeningExercise({
           <p
             id="listening-transcript"
             tabIndex={0}
-            className="text-bodySmall text-text-secondary bg-background-app p-3 px-4 rounded-sm m-0 border-l-4 border-warning-500 max-w-[420px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
+            className="text-bodySmall text-text-secondaryAccessible bg-background-app p-3 px-4 rounded-sm m-0 border-l-4 border-warning-textAccessible max-w-[420px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
           >
             {transcriptText}
           </p>
@@ -86,7 +87,7 @@ export function ListeningExercise({
       </div>
 
       <div className="flex flex-col gap-2 w-full text-left">
-        <label htmlFor="listening-input" className="text-labelSmall text-text-secondary">
+        <label htmlFor="listening-input" className="text-labelSmall text-text-secondaryAccessible font-medium">
           {answerLabel}
         </label>
         <Input
@@ -99,7 +100,7 @@ export function ListeningExercise({
           aria-describedby={describedByIds}
         />
         {expectedFormat && (
-          <p id={formatId} className="text-caption text-text-secondary m-0">
+          <p id={formatId} className="text-caption text-text-secondaryAccessible m-0">
             {expectedFormat}
           </p>
         )}

@@ -45,7 +45,8 @@ export function WritingExercise({
           </button>
         ))}
         {selectedIndexes.length === 0 && (
-          <span className="text-text-secondary text-sm">
+          /* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio 6.10:1 sobre background.app */
+          <span className="text-text-secondaryAccessible font-medium text-sm">
             Select the words below, in order, to build your sentence...
           </span>
         )}
@@ -70,7 +71,7 @@ export function WritingExercise({
               aria-label={`Add "${word}" to the sentence`}
               className={`px-[18px] py-2.5 rounded-sm text-bodySmall font-medium transition-all ${
                 isSubmitted || isUsed
-                  ? "bg-background-muted text-text-secondary border-transparent opacity-50 cursor-not-allowed shadow-none"
+                  ? "bg-background-muted text-text-secondaryAccessible border-transparent opacity-50 cursor-not-allowed shadow-none"
                   : "bg-surface-white border-[1.5px] border-border-default text-text-primary hover:bg-background-app cursor-pointer shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500"
               }`}
             >

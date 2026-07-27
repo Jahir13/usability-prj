@@ -26,7 +26,8 @@ function HeaderIconButton({ label, children, onClick }: HeaderIconButtonProps) {
       type="button" 
       aria-label={label} 
       onClick={onClick}
-      className="w-8 h-8 border-0 p-1 rounded-sm bg-transparent inline-flex items-center justify-center text-text-primary cursor-pointer transition-colors duration-200 ease-in-out hover:bg-background-app focus-visible:bg-background-app focus-visible:outline-none"
+      /* WCAG 2.4.7: Indicador de foco altamente perceptible por teclado */
+      className="w-8 h-8 border-0 p-1 rounded-sm bg-transparent inline-flex items-center justify-center text-text-primary cursor-pointer transition-colors duration-200 ease-in-out hover:bg-background-app focus-visible:bg-background-app focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1"
     >
       {children}
     </button>
@@ -39,7 +40,7 @@ function BrandMark({ onClick }: { onClick?: () => void }) {
       type="button"
       aria-label="LingoGuru"
       onClick={onClick}
-      className={`border-0 bg-transparent p-0 inline-flex items-center gap-2 ${onClick ? "cursor-pointer" : "cursor-default"}`}
+      className={`border-0 bg-transparent p-1 rounded-sm inline-flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${onClick ? "cursor-pointer" : "cursor-default"}`}
     >
       <img
         src={brandIcon}

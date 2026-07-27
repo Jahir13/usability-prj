@@ -10,17 +10,19 @@ type WelcomePageProps = {
 
 export function WelcomePage({ onStart }: WelcomePageProps) {
   return (
-    <div className="relative w-full min-h-screen bg-welcomeBackground flex items-center justify-center box-border">
+    /* WCAG 1.3.1: Usar <main id="main-content"> para estructura semántica y destino de Skip Link */
+    <main id="main-content" tabIndex={-1} className="relative w-full min-h-screen bg-welcomeBackground flex items-center justify-center box-border focus-visible:outline-none">
       <div className="w-[720px] h-[472px] rounded-[24px] bg-surface-white shadow-[0px_4px_16px_rgba(26,29,46,0.08)] box-border p-8 flex flex-col items-center justify-center gap-8 text-center">
         <div className="w-20 h-20 rounded-full bg-primary-soft text-primary-500 flex items-center justify-center">
-          <GraduationCap size={44} />
+          <GraduationCap size={44} aria-hidden="true" />
         </div>
 
         <div>
           <h1 className="font-heading font-extrabold text-[32px] text-text-primary m-0 mb-3">
             LingoGuru
           </h1>
-          <p className="text-body text-text-secondary max-w-[320px] m-0">
+          {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) sobre blanco para ratio 6.47:1 */}
+          <p className="text-body text-text-secondaryAccessible max-w-[320px] m-0">
             Master English at your own pace through quick, bite-sized daily exercises.
           </p>
         </div>
@@ -35,7 +37,7 @@ export function WelcomePage({ onStart }: WelcomePageProps) {
           Get Started →
         </Button>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -88,13 +90,16 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-welcomeBackground flex items-center justify-center box-border">
+    /* WCAG 1.3.1: Usar <main id="main-content"> para la vista completa de formulario */
+    <main id="main-content" tabIndex={-1} className="relative w-full min-h-screen bg-welcomeBackground flex items-center justify-center box-border focus-visible:outline-none">
       <form onSubmit={handleSubmit} className="w-[720px] min-h-[472px] rounded-[24px] bg-surface-white shadow-[0px_4px_16px_rgba(26,29,46,0.08)] box-border py-9 px-8 flex flex-col gap-5 text-left">
         <div className="text-center">
-          <h2 className="font-heading font-bold text-2xl text-text-primary m-0 mb-1">
+          {/* WCAG 1.3.1: Unico <h1> para el encabezado principal de la vista */}
+          <h1 className="font-heading font-bold text-2xl text-text-primary m-0 mb-1">
             {mode === "register" ? "Create Profile" : "Welcome Back"}
-          </h2>
-          <p className="text-bodySmall text-text-secondary m-0">
+          </h1>
+          {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E) para ratio 6.47:1 */}
+          <p className="text-bodySmall text-text-secondaryAccessible m-0">
             {mode === "register"
               ? "Join LingoGuru and track your milestones!"
               : "Log in to continue your English learning journey!"}
@@ -182,11 +187,11 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
           {error && (
             <span
               id="auth-error"
-              className="text-danger-500 text-[13px] font-medium text-center"
+              className="text-danger-textAccessible text-[13px] font-medium text-center"
               role="alert"
               aria-live="assertive"
             >
-              ⚠️ {error}
+              <span aria-hidden="true">⚠️ </span>{error}
             </span>
           )}
         </div>
@@ -209,7 +214,8 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
               setMode(prev => prev === "register" ? "login" : "register");
               setError("");
             }}
-            className="w-full text-primary-500 font-medium text-center py-1 underline hover:opacity-80 transition-opacity"
+            /* WCAG 1.4.3: Usar text-text-linkAccessible (#3550DC) para ratio de contraste 6.32:1 */
+            className="w-full text-text-linkAccessible font-medium text-center py-1 underline hover:opacity-80 transition-opacity"
           >
             {mode === "register"
               ? "Already have an account? Log in"
@@ -217,6 +223,6 @@ export function AuthFormPage({ onSubmit }: AuthFormPageProps) {
           </Button>
         </div>
       </form>
-    </div>
+    </main>
   );
 }

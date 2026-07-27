@@ -72,7 +72,8 @@ function SkillTabButton({
         >
           {icon}
         </span>
-        <span className={`text-label whitespace-nowrap ${active ? "text-primary-500" : "text-text-primary"}`}>
+        {/* WCAG 1.4.3: Usar text-primary-accessible (#3550DC) sobre background primary-soft (#EEF1FD) para ratio 5.58:1 */}
+        <span className={`text-label whitespace-nowrap ${active ? "text-primary-accessible font-bold" : "text-text-primary"}`}>
           {label}
         </span>
       </span>
@@ -90,7 +91,7 @@ function SkillTabButton({
 export function SkillTabSidebar({
   activeSkill,
   onSkillChange,
-  panelId = "learning-path-panel",
+  panelId = "main-content",
 }: SkillTabSidebarProps) {
   const buttonsRef = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -131,28 +132,31 @@ export function SkillTabSidebar({
       data-node-id="12:1592"
       data-name="Sidebar"
     >
-      <div
-        role="tablist"
-        aria-label="Language skills"
-        aria-orientation="vertical"
-        className="flex flex-row overflow-x-auto w-full md:flex-col md:overflow-x-visible md:pt-6"
-      >
-        {skillTabs.map((item, index) => (
-          <SkillTabButton
-            key={item.skill}
-            skill={item.skill}
-            icon={item.icon}
-            label={item.label}
-            panelId={panelId}
-            active={item.skill === activeSkill}
-            buttonRef={(element) => {
-              buttonsRef.current[index] = element;
-            }}
-            onClick={() => onSkillChange?.(item.skill)}
-            onKeyDown={(event) => handleKeyDown(event, index)}
-          />
-        ))}
-      </div>
+      {/* WCAG 1.3.1: Envolver la lista de pestañas en un <nav> semántico */}
+      <nav aria-label="Skills navigation" className="w-full">
+        <div
+          role="tablist"
+          aria-label="Language skills"
+          aria-orientation="vertical"
+          className="flex flex-row overflow-x-auto w-full md:flex-col md:overflow-x-visible md:pt-6"
+        >
+          {skillTabs.map((item, index) => (
+            <SkillTabButton
+              key={item.skill}
+              skill={item.skill}
+              icon={item.icon}
+              label={item.label}
+              panelId={panelId}
+              active={item.skill === activeSkill}
+              buttonRef={(element) => {
+                buttonsRef.current[index] = element;
+              }}
+              onClick={() => onSkillChange?.(item.skill)}
+              onKeyDown={(event) => handleKeyDown(event, index)}
+            />
+          ))}
+        </div>
+      </nav>
     </aside>
   );
 }

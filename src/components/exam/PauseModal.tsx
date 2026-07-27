@@ -78,20 +78,23 @@ export function PauseModal({
         aria-labelledby="pause-title"
         aria-describedby="pause-desc"
       >
-        <div className="w-14 h-14 rounded-full bg-warning-soft text-warning-500 flex items-center justify-center">
-          <AlertCircle size={28} />
+        {/* WCAG 1.4.3: Usar text-warning-textAccessible (#B45309 = 5.45:1) */}
+        <div className="w-14 h-14 rounded-full bg-warning-soft text-warning-textAccessible flex items-center justify-center">
+          <AlertCircle size={28} aria-hidden="true" />
         </div>
 
         <div>
-          <h3 
+          {/* WCAG 1.3.1: Usar <h2> para el título del diálogo modal */}
+          <h2 
             id="pause-title"
             className="font-heading font-bold text-[22px] text-text-primary m-0 mb-2"
           >
             Lesson Paused
-          </h3>
+          </h2>
+          {/* WCAG 1.4.3: Usar text-text-secondaryAccessible (#595D6E = 6.47:1) */}
           <p 
             id="pause-desc"
-            className="text-bodySmall text-text-secondary m-0 leading-[22px]"
+            className="text-bodySmall text-text-secondaryAccessible m-0 leading-[22px]"
           >
             Do you want to take a break or exit the lesson? Your current level progress will not be saved.
           </p>

@@ -17,8 +17,9 @@ export function AccumulatedProgressBar({
 
   return (
     <div className="w-full bg-surface-white shadow-accumulatedCardShadow rounded-lg box-border p-6 flex flex-col items-start" data-node-id="12:1630" data-name="Container">
+      {/* WCAG 1.4.3: Usar text-text-mutedAccessible (#595D6E) para ratio de contraste 6.47:1 */}
       <span
-        className="text-learningPathHeading text-text-muted uppercase tracking-[1.5px]"
+        className="text-learningPathHeading text-text-mutedAccessible font-bold uppercase tracking-[1.5px]"
         data-node-id="12:1632"
       >
         Accumulated
