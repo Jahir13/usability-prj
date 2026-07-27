@@ -67,9 +67,11 @@ export function GameNav({ progress, counter, onPause }: GameNavProps) {
         </div>
       </div>
 
+      {/* WCAG 4.1.2: role="timer" permite aria-label en el contador */}
       <div
+        role="timer"
+        aria-label={`Time remaining: ${counter} seconds`}
         className="w-16 h-16 flex items-center justify-center text-text-primary shrink-0 -translate-y-2"
-        aria-label={`Counter ${counter}`}
         data-node-id="12:2591"
         data-name="Counter"
       >

@@ -46,11 +46,11 @@ export function StartLevelButton({
         <span className="text-labelSmall text-text-secondaryAccessible font-medium whitespace-nowrap">
           {exercises} exercises
         </span>
-        <span className="text-labelSmall text-border-default whitespace-nowrap" aria-hidden="true">
+        <span className="text-labelSmall text-text-secondaryAccessible font-bold whitespace-nowrap" aria-hidden="true">
           ·
         </span>
         <span className="text-labelSmall text-text-secondaryAccessible font-medium whitespace-nowrap">{minutes}</span>
-        <span className="text-labelSmall text-border-default whitespace-nowrap" aria-hidden="true">
+        <span className="text-labelSmall text-text-secondaryAccessible font-bold whitespace-nowrap" aria-hidden="true">
           ·
         </span>
         <span className="text-labelSmall text-success-textAccessible font-bold whitespace-nowrap">{xp}</span>

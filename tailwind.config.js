@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         primary: {
-          500: "#4f6ef7",
+          500: "#3550dc",
           soft: "#eef1fd",
           onPrimary: "#ffffff",
           accessible: "#3550dc",
@@ -21,7 +21,7 @@ export default {
         warning: {
           500: "#f7a14f",
           soft: "rgba(247,161,79,0.1)",
-          textAccessible: "#b45309",
+          textAccessible: "#92400e",
         },
         danger: {
           500: "#ea2b2b",
